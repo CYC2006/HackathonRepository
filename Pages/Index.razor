@@ -1,0 +1,99 @@
+@page "/"
+
+<h1 style="text-align:center;">🌏 永續大富翁</h1>
+
+<div style="display:flex; justify-content:space-around; margin-bottom:20px;">
+    <div>💰 金錢：@money</div>
+    <div>🌿 環保評分：@ecoScore</div>
+    <div>🏛️ 社會觀感：@socialScore</div>
+    <div>📅 第 @week 週</div>
+</div>
+
+<div style="display:grid; grid-template-columns: repeat(6, 100px); gap:5px; justify-content:center; margin:auto;">
+    @foreach (var tile in mapTiles)
+    {
+        <div class="tile @(playerPosition == tile.Id ? "player-tile" : "")" 
+             @ondblclick="@(() => ShowCityInfo(tile))">
+            @tile.Name
+        </div>
+    }
+</div>
+
+<div style="text-align:center; margin-top:30px;">
+    <button class="btn btn-primary" @onclick="RollDice">🎲 擲骰子</button>
+    <p>你擲到了：@lastRoll</p>
+</div>
+
+@if (showDialog)
+{
+    <div class="overlay">
+        <div class="dialog">
+            <h3>@dialogTitle</h3>
+            <p>@dialogMessage</p>
+            <button @onclick="ConfirmEvent">確定</button>
+            <button @onclick="CancelEvent">取消</button>
+        </div>
+    </div>
+}
+
+@code {
+    // === 狀態變數 ===
+    int money = 0;
+    int ecoScore = 0;
+    int socialScore = 0;
+    int week = 1;
+    int playerPosition = 0;
+    int lastRoll = 0;
+
+    bool showDialog = false;
+    string dialogTitle = "";
+    string dialogMessage = "";
+
+    record Tile(int Id, string Name, string Type);
+    List<Tile> mapTiles = new()
+    {
+        new(0, "台南", "City"),
+        new(1, "高雄", "City"),
+        new(2, "屏東", "City"),
+        new(3, "機會", "Chance"),
+        new(4, "命運", "Fate"),
+        new(5, "嘉義", "City"),
+        new(6, "雲林", "City"),
+        new(7, "彰化", "City"),
+        new(8, "台中", "City"),
+        new(9, "苗栗", "City"),
+        new(10, "新竹", "City"),
+        new(11, "桃園", "City"),
+        new(12, "新北", "City"),
+        new(13, "台北", "City"),
+        new(14, "宜蘭", "City"),
+        new(15, "花蓮", "City"),
+        new(16, "台東", "City"),
+    };
+
+    void RollDice()
+    {
+        var rand = new Random();
+        lastRoll = rand.Next(1, 7);
+        playerPosition = (playerPosition + lastRoll) % mapTiles.Count;
+        week++;
+
+        var tile = mapTiles[playerPosition];
+        if (tile.Type == "City" || tile.Type == "Chance" || tile.Type == "Fate")
+        {
+            dialogTitle = $"抵達：{tile.Name}";
+            dialogMessage = $"是否要查看 {tile.Type} 事件？";
+            showDialog = true;
+        }
+    }
+
+    void ShowCityInfo(Tile tile)
+    {
+        dialogTitle = $"{tile.Name} 資料";
+        dialogMessage = $"這裡將顯示 {tile.Name} 的永續發展資料...";
+        showDialog = true;
+    }
+
+    void ConfirmEvent() => showDialog = false;
+    void CancelEvent() => showDialog = false;
+}
