@@ -9,19 +9,38 @@
     <div>📅 第 @week 週</div>
 </div>
 
-<div style="display:grid; grid-template-columns: repeat(6, 100px); gap:5px; justify-content:center; margin:auto;">
-    @foreach (var tile in mapTiles)
+<div class="board">
+    @for (int r = 0; r < ROWS; r++)
     {
-        <div class="tile @(playerPosition == tile.Id ? "player-tile" : "")" 
-             @ondblclick="@(() => ShowCityInfo(tile))">
-            @tile.Name
-        </div>
-    }
-</div>
+        for (int c = 0; c < COLS; c++)
+        {
+            var name = grid[r, c];
 
-<div style="text-align:center; margin-top:30px;">
-    <button class="btn btn-primary" @onclick="RollDice">🎲 擲骰子</button>
-    <p>你擲到了：@lastRoll</p>
+            if (name == "空心")
+            {
+                <div class="void"></div>
+            }
+            else if (name == "空格")
+            {
+                <div class="empty-tile"></div>
+            }
+            else
+            {
+                var tile = tilesByPos.TryGetValue((r, c), out var t) ? t : null;
+                bool isPlayer = tile is not null && tile.Id == playerIndex;
+
+                <div class="tile @(isPlayer ? "player-tile" : "") @(IsCorner(name) ? "corner" : "")"
+                     @ondblclick='() => { if (tile != null && tile.Type == "City") ShowCityInfo(tile); }'>
+                    @name
+                </div>
+            }
+        }
+    }
+
+    <div class="center-dice">
+        <button class="btn btn-primary" @onclick="RollDice">🎲 擲骰子</button>
+        <div style="margin-top:6px; font-weight:600;">你擲到了：@lastRoll</div>
+    </div>
 </div>
 
 @if (showDialog)
@@ -37,52 +56,87 @@
 }
 
 @code {
-    // === 狀態變數 ===
-    int money = 0;
-    int ecoScore = 0;
-    int socialScore = 0;
-    int week = 1;
-    int playerPosition = 0;
-    int lastRoll = 0;
+    const int ROWS = 6, COLS = 10;
+
+    int money = 0, ecoScore = 0, socialScore = 0, week = 1;
+    int lastRoll = 0, playerIndex = 0;
 
     bool showDialog = false;
-    string dialogTitle = "";
-    string dialogMessage = "";
+    string dialogTitle = "", dialogMessage = "";
 
-    record Tile(int Id, string Name, string Type);
-    List<Tile> mapTiles = new()
-    {
-        new(0, "台南", "City"),
-        new(1, "高雄", "City"),
-        new(2, "屏東", "City"),
-        new(3, "機會", "Chance"),
-        new(4, "命運", "Fate"),
-        new(5, "嘉義", "City"),
-        new(6, "雲林", "City"),
-        new(7, "彰化", "City"),
-        new(8, "台中", "City"),
-        new(9, "苗栗", "City"),
-        new(10, "新竹", "City"),
-        new(11, "桃園", "City"),
-        new(12, "新北", "City"),
-        new(13, "台北", "City"),
-        new(14, "宜蘭", "City"),
-        new(15, "花蓮", "City"),
-        new(16, "台東", "City"),
+    // 排列：外框 + 中間空心；「空格」= 可見白格；「空心」= 佔位但不可見（不觸發）
+    string[,] grid = new string[ROWS, COLS] {
+        { "台南","高雄","屏東","命運","花蓮","台東","空格","機會","宜蘭","台北" },
+        { "嘉義","空心","空心","空心","空心","空心","空心","空心","空心","新北" },
+        { "空格","空心","空心","空心","空心","空心","空心","空心","空心","空格" },
+        { "雲林","空心","空心","空心","空心","空心","空心","空心","空心","機會" },
+        { "彰化","空心","空心","空心","空心","空心","空心","空心","空心","空格" },
+        { "台中","南投","命運","空格","苗栗","機會","空格","命運","新竹","桃園" }
     };
+
+    record Tile(int Id, string Name, string Type, int Row, int Col);
+    Dictionary<(int r,int c), Tile> tilesByPos = new();
+    List<Tile> ring = new();
+
+    protected override void OnInitialized() => BuildTilesAndRing();
+
+    void BuildTilesAndRing()
+    {
+        tilesByPos.Clear(); ring.Clear();
+
+        string TypeOf(string n) => n switch {
+            "機會" => "Chance",
+            "命運" => "Fate",
+            "空格" => "Empty",
+            "空心" => "Void",
+            _      => "City"
+        };
+
+        // 建立可互動格
+        for (int r = 0; r < ROWS; r++)
+            for (int c = 0; c < COLS; c++)
+                if (grid[r,c] is not ("空心" or "空格"))
+                    tilesByPos[(r,c)] = new Tile(-1, grid[r,c], TypeOf(grid[r,c]), r, c);
+
+        // 生成外框順時針路徑
+        var path = new List<(int r,int c)>();
+        for (int c = 0; c < COLS; c++) path.Add((0,c));                    // 上
+        for (int r = 1; r < ROWS; r++) path.Add((r, COLS-1));             // 右
+        for (int c = COLS-2; c >= 0; c--) path.Add((ROWS-1,c));           // 下
+        for (int r = ROWS-2; r >= 1; r--) path.Add((r,0));                // 左
+
+        int id = 0;
+        foreach (var (r,c) in path)
+        {
+            var n = grid[r,c];
+            if (n is "空格" or "空心") continue; // 不進 ring
+            var t = tilesByPos[(r,c)];
+            var withId = new Tile(id++, t.Name, t.Type, r, c);
+            tilesByPos[(r,c)] = withId;
+            ring.Add(withId);
+        }
+
+        playerIndex = ring.FindIndex(t => t.Name == "台南");
+        if (playerIndex < 0) playerIndex = 0;
+    }
 
     void RollDice()
     {
         var rand = new Random();
         lastRoll = rand.Next(1, 7);
-        playerPosition = (playerPosition + lastRoll) % mapTiles.Count;
+        playerIndex = (playerIndex + lastRoll) % ring.Count;
         week++;
 
-        var tile = mapTiles[playerPosition];
-        if (tile.Type == "City" || tile.Type == "Chance" || tile.Type == "Fate")
+        var tile = ring[playerIndex];
+        if (tile.Type is "City" or "Chance" or "Fate")
         {
             dialogTitle = $"抵達：{tile.Name}";
-            dialogMessage = $"是否要查看 {tile.Type} 事件？";
+            dialogMessage = tile.Type switch {
+                "City"   => "是否查看該縣市資料？",
+                "Chance" => "是否執行『機會』事件？",
+                "Fate"   => "是否執行『命運』事件？",
+                _        => ""
+            };
             showDialog = true;
         }
     }
@@ -90,10 +144,12 @@
     void ShowCityInfo(Tile tile)
     {
         dialogTitle = $"{tile.Name} 資料";
-        dialogMessage = $"這裡將顯示 {tile.Name} 的永續發展資料...";
+        dialogMessage = $"這裡將顯示 {tile.Name} 的永續發展資料（占位）。";
         showDialog = true;
     }
 
     void ConfirmEvent() => showDialog = false;
-    void CancelEvent() => showDialog = false;
+    void CancelEvent()  => showDialog = false;
+
+    bool IsCorner(string n) => n is "台南" or "台中" or "台北" or "桃園";
 }

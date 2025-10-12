@@ -137,3 +137,41 @@ code {
 .dialog {
     background:white; padding:20px; border-radius:10px; width:300px; text-align:center;
 }
+
+/* === Monopoly Board === */
+.board{
+  position:relative;
+  display:grid;
+  grid-template-rows:repeat(6,65px);
+  grid-template-columns:repeat(10,65px);
+  gap:10px;                /* 增加間距避免重疊 */
+  justify-content:center;
+  margin:0 auto;
+}
+
+.tile,.empty-tile,.void{
+  width:65px;              /* 固定格子寬高 */
+  height:65px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  border-radius:10px;
+  box-sizing:border-box;   /* 確保邊框不撐大格子 */
+}
+
+.empty-tile{
+  border:2px solid #555;
+  background:#eef;         /* 與 tile 相同外觀，但沒文字 */
+}
+
+.tile{ border:2px solid #555;background:#eef; cursor:pointer; }
+.player-tile{ background:#ffc107; font-weight:700; }
+.void{ visibility:hidden; }          /* 佔位但不可見，維持格子座標 */
+.center-dice{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center;
+}
+.overlay{ position:fixed; inset:0; background:rgba(0,0,0,.4);
+  display:flex; align-items:center; justify-content:center; }
+.dialog{ background:#fff; padding:20px 24px; border-radius:12px; text-align:center; }
