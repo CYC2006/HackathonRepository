@@ -1,177 +1,236 @@
+/* 設定全域字型為常見的無襯線字體（由前到後回退） */
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* 主要 UI 字型 */
 }
 
+/* 讓 h1 在被聚焦時不顯示外框（避免藍色/橘色 outline）*/
 h1:focus {
-    outline: none;
+    outline: none; /* 移除焦點外框（可改為自訂樣式以保可及性）*/
 }
 
+/* 連結與 .btn-link 類別的文字顏色（品牌藍） */
 a, .btn-link {
-    color: #0071c1;
+    color: #0071c1; /* 超連結色 */
 }
 
+/* 主要按鈕底色與邊框 */
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    color: #fff;            /* 文字白 */
+    background-color: #1b6ec2; /* 背景藍 */
+    border-color: #1861ac;  /* 邊框較深藍 */
 }
 
+/* 各種可聚焦元件在 focus/active 時的外圈陰影（Bootstrap 風格） */
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb; /* 內白外藍的雙層光暈 */
 }
 
+/* 主要內容容器的上方內距，避免貼齊頂部 */
 .content {
-    padding-top: 1.1rem;
+    padding-top: 1.1rem; /* 上方留白 */
 }
 
+/* 驗證成功且被修改過的輸入框（非核取方塊）加綠框 */
 .valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
+    outline: 1px solid #26b050; /* 綠色外框 */
 }
 
+/* 驗證失敗輸入框紅框 */
 .invalid {
-    outline: 1px solid red;
+    outline: 1px solid red; /* 紅色外框 */
 }
 
+/* 驗證訊息文字為紅色 */
 .validation-message {
-    color: red;
+    color: red; /* 錯誤提示色 */
 }
 
+/* Blazor 全域錯誤條 UI 容器樣式 */
 #blazor-error-ui {
-    color-scheme: light only;
-    background: lightyellow;
-    bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
-    display: none;
-    left: 0;
-    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
+    color-scheme: light only; /* 明亮色系（避免深色模式覆蓋）*/
+    background: lightyellow;  /* 背景淡黃提醒 */
+    bottom: 0;                /* 固定在視窗底部 */
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2); /* 上方陰影 */
+    box-sizing: border-box;   /* 含邊框計算尺寸 */
+    display: none;            /* 預設隱藏 */
+    left: 0;                  /* 貼齊左側 */
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem; /* 內距 */
+    position: fixed;          /* 固定定位 */
+    width: 100%;              /* 滿版寬 */
+    z-index: 1000;            /* 疊在最上層 */
 }
 
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
-    }
+/* 錯誤條的關閉（X）按鈕定位 */
+#blazor-error-ui .dismiss {
+    cursor: pointer;      /* 游標為可點擊 */
+    position: absolute;   /* 絕對定位 */
+    right: 0.75rem;       /* 右邊距 */
+    top: 0.5rem;          /* 上邊距 */
+}
 
+/* 錯誤邊界（Blazor 元件錯誤包裹）背景與圖示 */
 .blazor-error-boundary {
+    /* 左側嵌入 Base64 SVG 圖示，並以深紅底色呈現 */
     background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
-    padding: 1rem 1rem 1rem 3.7rem;
-    color: white;
+    padding: 1rem 1rem 1rem 3.7rem; /* 讓圖示不會被文字覆蓋 */
+    color: white; /* 白字 */
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
+/* 在錯誤邊界容器後面補上一段文字內容 */
+.blazor-error-boundary::after {
+    content: "An error has occurred."; /* 顯示固定錯誤訊息 */
+}
 
+/* 載入進度外框（圓形進度條容器） */
 .loading-progress {
-    position: relative;
-    display: block;
-    width: 8rem;
-    height: 8rem;
-    margin: 20vh auto 1rem auto;
+    position: relative;  /* 讓內部文字絕對定位參考 */
+    display: block;      /* 區塊元素 */
+    width: 8rem;         /* 正方形寬 */
+    height: 8rem;        /* 正方形高 */
+    margin: 20vh auto 1rem auto; /* 垂直置中偏下＋水平置中 */
 }
 
-    .loading-progress circle {
-        fill: none;
-        stroke: #e0e0e0;
-        stroke-width: 0.6rem;
-        transform-origin: 50% 50%;
-        transform: rotate(-90deg);
-    }
+/* 進度圈（兩個 circle：底灰＋上層藍） */
+.loading-progress circle {
+    fill: none;             /* 空心圓 */
+    stroke: #e0e0e0;        /* 灰色邊 */
+    stroke-width: 0.6rem;   /* 邊框粗細 */
+    transform-origin: 50% 50%; /* 旋轉中心在圓心 */
+    transform: rotate(-90deg); /* 讓起點在正上方 */
+}
 
-        .loading-progress circle:last-child {
-            stroke: #1b6ec2;
-            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
-            transition: stroke-dasharray 0.05s ease-in-out;
-        }
+/* 上層的進度弧線（最後一個 circle） */
+.loading-progress circle:last-child {
+    stroke: #1b6ec2; /* 進度色 */
+    /* 根據 --blazor-load-percentage 設定虛線長度形成進度弧 */
+    stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+    transition: stroke-dasharray 0.05s ease-in-out; /* 平滑變化 */
+}
 
+/* 中央的進度文字（百分比或 Loading） */
 .loading-progress-text {
-    position: absolute;
-    text-align: center;
-    font-weight: bold;
-    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+    position: absolute;      /* 疊在圓上 */
+    text-align: center;      /* 置中對齊 */
+    font-weight: bold;       /* 粗體 */
+    inset: calc(20vh + 3.25rem) 0 auto 0.2rem; /* 大致置中於圓心 */
 }
 
-    .loading-progress-text:after {
-        content: var(--blazor-load-percentage-text, "Loading");
-    }
+/* 進度文字內容從 CSS 變數讀取 */
+.loading-progress-text:after {
+    content: var(--blazor-load-percentage-text, "Loading"); /* 顯示百分比或預設字 */
+}
 
+/* 行內程式碼文字顏色（強調色） */
 code {
-    color: #c02d76;
+    color: #c02d76; /* 粉紫色 */
 }
 
+/* Bootstrap 浮動標籤：placeholder 在未聚焦時靠右、次要色 */
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-    color: var(--bs-secondary-color);
-    text-align: end;
+    color: var(--bs-secondary-color); /* 次要文字色 */
+    text-align: end;                  /* 文字靠右 */
 }
 
+/* 聚焦後 placeholder 換成靠左（輸入時更直覺） */
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-    text-align: start;
+    text-align: start; /* 聚焦改為靠左 */
 }
 
+/* === 通用棋格（舊樣式：單一 tile）=== */
 .tile {
-    width: 100px;
-    height: 100px;
-    border: 2px solid #555;
-    border-radius: 8px;
-    text-align: center;
-    line-height: 100px;
-    background-color: #eef;
-    cursor: pointer;
-    transition: transform 0.1s;
+    width: 100px;                 /* 寬 100 */
+    height: 100px;                /* 高 100 */
+    border: 2px solid #555;       /* 深灰邊框 */
+    border-radius: 8px;           /* 圓角 */
+    text-align: center;           /* 文字水平置中 */
+    line-height: 100px;           /* 用行高垂直置中（單行文字）*/
+    background-color: #eef;       /* 淡藍底 */
+    cursor: pointer;              /* 指標為手 */
+    transition: transform 0.1s;   /* hover 放大動畫 */
 }
+
+/* 滑過 tile 微放大（舊樣式） */
 .tile:hover { transform: scale(1.05); }
+
+/* 玩家所在格的特別底色（舊樣式） */
 .player-tile {
-    background-color: #ffc107;
-    font-weight: bold;
+    background-color: #ffc107; /* 黃底 */
+    font-weight: bold;         /* 粗體字 */
 }
+
+/* 通用遮罩（全畫面半透明黑底） */
 .overlay {
-    position: fixed; top:0; left:0; width:100%; height:100%;
-    background-color: rgba(0,0,0,0.5);
-    display:flex; align-items:center; justify-content:center;
+    position: fixed; top:0; left:0; width:100%; height:100%; /* 撐滿視窗 */
+    background-color: rgba(0,0,0,0.5); /* 半透明黑 */
+    display:flex; align-items:center; justify-content:center; /* 子內容置中 */
 }
+
+/* 中央對話框（舊樣式） */
 .dialog {
-    background:white; padding:20px; border-radius:10px; width:300px; text-align:center;
+    background:white; padding:20px; border-radius:10px; width:300px; text-align:center; /* 白底卡片 */
 }
 
-/* === Monopoly Board === */
+/* === Monopoly 版面（新版樣式）=== */
 .board{
-  position:relative;
-  display:grid;
-  grid-template-rows:repeat(6,65px);
-  grid-template-columns:repeat(10,65px);
-  gap:10px;                /* 增加間距避免重疊 */
-  justify-content:center;
-  margin:0 auto;
+  position:relative;                    /* 供中心骰子絕對定位參考 */
+  display:grid;                          /* 使用 CSS Grid 排版 */
+  grid-template-rows:repeat(6,65px);     /* 6 列，每列 65px 高 */
+  grid-template-columns:repeat(10,65px); /* 10 欄，每欄 65px 寬 */
+  gap:10px;                              /* 格與格間距，避免重疊 */
+  justify-content:center;                /* 水平置中整個 Grid */
+  margin:0 auto;                         /* 讓整塊置中 */
 }
 
+/* 三種格子基底：正常格、空格（無字）、隱形占位 */
 .tile,.empty-tile,.void{
-  width:65px;              /* 固定格子寬高 */
-  height:65px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:13px;
-  border-radius:10px;
-  box-sizing:border-box;   /* 確保邊框不撐大格子 */
+  width:65px;              /* 固定寬度，避免縮放 */
+  height:65px;             /* 固定高度 */
+  display:flex;            /* 用 flex 置中文本 */
+  align-items:center;      /* 垂直置中 */
+  justify-content:center;  /* 水平置中 */
+  font-size:13px;          /* 字級 */
+  border-radius:10px;      /* 圓角更大 */
+  box-sizing:border-box;   /* 邊框不影響整體尺寸 */
 }
 
+/* 空格：看起來像一般格子，但預期不顯示文字 */
 .empty-tile{
-  border:2px solid #555;
-  background:#eef;         /* 與 tile 相同外觀，但沒文字 */
+  border:2px solid #555; /* 與 tile 同樣邊框 */
+  background:#eef;       /* 與 tile 同色背景 */
 }
 
-.tile{ border:2px solid #555;background:#eef; cursor:pointer; }
-.player-tile{ background:#ffc107; font-weight:700; }
-.void{ visibility:hidden; }          /* 佔位但不可見，維持格子座標 */
-.center-dice{
-  position:absolute; left:50%; top:50%;
-  transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center;
+/* 一般可互動的格（新版） */
+.tile{
+  border:2px solid #555;  /* 深灰邊框 */
+  background:#eef;        /* 淡藍底 */
+  cursor:pointer;         /* 可點擊 */
 }
-.overlay{ position:fixed; inset:0; background:rgba(0,0,0,.4);
-  display:flex; align-items:center; justify-content:center; }
-.dialog{ background:#fff; padding:20px 24px; border-radius:12px; text-align:center; }
+
+/* 玩家位置格（新版） */
+.player-tile{
+  background:#ffc107; /* 黃底 */
+  font-weight:700;    /* 粗字 */
+}
+
+/* 隱形占位格：保留格子空間但不顯示 */
+.void{
+  visibility:hidden; /* 仍佔版面位置，但不可見 */
+}
+
+/* 版面中央的骰子/控制面板容器 */
+.center-dice{
+  position:absolute; left:50%; top:50%;               /* 放在 board 正中央 */
+  transform:translate(-50%,-50%);                     /* 精準置中 */
+  display:flex; flex-direction:column; align-items:center; /* 直向排列置中 */
+}
+
+/* 全畫面遮罩（新版，與上方 overlay 功能相同但語法簡潔） */
+.overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.4); /* 佔滿視窗，半透明黑 */
+  display:flex; align-items:center; justify-content:center; /* 置中內容 */
+}
+
+/* 對話框（新版）：圓角與內距微調 */
+.dialog{
+  background:#fff; padding:20px 24px; border-radius:12px; text-align:center; /* 白底卡片 */
+}
