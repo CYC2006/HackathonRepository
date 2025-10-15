@@ -230,7 +230,54 @@ code {
   display:flex; align-items:center; justify-content:center; /* 置中內容 */
 }
 
-/* 對話框（新版）：圓角與內距微調 */
-.dialog{
-  background:#fff; padding:20px 24px; border-radius:12px; text-align:center; /* 白底卡片 */
+/* ===== Dialog 視窗大小與置中修正 ===== */
+.dialog {
+  background: #fff;             /* 白色背景 */
+  padding: 24px 32px;           /* 四周留白 */
+  border-radius: 16px;          /* 圓角 */
+  text-align: center;           /* 標題與文字置中 */
+  width: 70vw;                  /* 寬度佔視窗 70% */
+  max-width: 700px;             /* 最大寬度限制（避免太寬） */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2); /* 淺陰影 */
+  display: flex;                /* 使用 flex 垂直置中 */
+  flex-direction: column;       /* 垂直排列內容 */
+  align-items: center;          /* 水平置中 */
+}
+
+/* ===== 卡片容器（在白底內） ===== */
+.card-list {
+  display: flex;                /* 彈性盒排列 */
+  flex-direction: column;       /* 垂直堆疊 */
+  gap: 8px;                     /* 卡片之間距離 */
+  width: 90%;                   /* 比 dialog 窄一點 */
+  max-width: 600px;             /* 避免太寬 */
+  margin: 0 auto;               /* 置中 */
+}
+
+/* ===== 單張卡片 ===== */
+.card-item {
+  width: 100%;                  /* 填滿容器寬度 */
+  aspect-ratio: 5 / 1;          /* 高:寬 = 1:5 */
+  border: 2px solid #555;       /* 外框 */
+  border-radius: 10px;          /* 圓角 */
+  background: #eef;             /* 淺底 */
+  display: flex;                /* 置中內容 */
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;       /* 邊框不影響尺寸 */
+  transition: background-color 0.2s ease;
+}
+.card-item:hover {
+  background: #e6eaff;          /* 滑過變亮 */
+}
+.card-item:active {
+  filter: brightness(0.95);     /* 點擊變暗 */
+}
+
+/* 隱藏頂部導覽列（包含 About 連結那條） */
+.navbar, .top-row {
+  display: none !important;
 }

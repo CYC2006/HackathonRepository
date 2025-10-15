@@ -30,7 +30,7 @@
                 bool isPlayer = tile is not null && tile.Id == playerIndex;
 
                 <div class="tile @(isPlayer ? "player-tile" : "") @(IsCorner(name) ? "corner" : "")"
-                     @ondblclick='() => { if (tile != null && tile.Type == "City") ShowCityInfo(tile); }'>
+                     @ondblclick='() => { if (tile != null && tile.Type == "City") OpenCardPicker(tile); }'>
                     @name
                 </div>
             }
@@ -43,14 +43,22 @@
     </div>
 </div>
 
-@if (showDialog)
+@if (showCardPicker)
 {
     <div class="overlay">
         <div class="dialog">
-            <h3>@dialogTitle</h3>
-            <p>@dialogMessage</p>
-            <button @onclick="ConfirmEvent">確定</button>
-            <button @onclick="CancelEvent">取消</button>
+            <h3 style="margin-bottom:12px;">@currentTileTitle</h3>
+
+            <div class="card-list">
+                @for (int i = 0; i < cardDeck.Count; i++)
+                {
+                    <div class="card-item" @onclick='() => PickCard(i)'>
+                        @cardDeck[i]
+                    </div>
+                }
+            </div>
+
+            <button style="margin-top:12px;" @onclick="CloseCardPicker">關閉</button>
         </div>
     </div>
 }
@@ -61,10 +69,22 @@
     int money = 0, ecoScore = 0, socialScore = 0, week = 1;
     int lastRoll = 0, playerIndex = 0;
 
-    bool showDialog = false;
-    string dialogTitle = "", dialogMessage = "";
+    // ===== 卡片視窗狀態 =====
+    bool showCardPicker = false;
+    string currentTileTitle = "";
+    Tile? currentTile;
 
-    // 排列：外框 + 中間空心；「空格」= 可見白格；「空心」= 佔位但不可見（不觸發）
+    // 📝 卡片內容（可自行修改文字）
+    List<string> cardDeck = new()
+    {
+        "卡片 #1",
+        "卡片 #2",
+        "卡片 #3",
+        "卡片 #4",
+        "卡片 #5"
+    };
+
+    // ===== 棋盤排列 =====
     string[,] grid = new string[ROWS, COLS] {
         { "台南","高雄","屏東","事件","花蓮","台東","宜蘭","事件","綠島","台北" },
         { "嘉義","空心","空心","空心","空心","空心","空心","空心","空心","基隆" },
@@ -75,7 +95,7 @@
     };
 
     record Tile(int Id, string Name, string Type, int Row, int Col);
-    Dictionary<(int r,int c), Tile> tilesByPos = new();
+    Dictionary<(int r, int c), Tile> tilesByPos = new();
     List<Tile> ring = new();
 
     protected override void OnInitialized() => BuildTilesAndRing();
@@ -84,35 +104,34 @@
     {
         tilesByPos.Clear(); ring.Clear();
 
-        string TypeOf(string n) => n switch {
-            "機會" => "Chance",
-            "命運" => "Fate",
+        string TypeOf(string n) => n switch
+        {
+            "事件" => "Event",
             "空格" => "Empty",
             "空心" => "Void",
-            _      => "City"
+            _ => "City"
         };
 
-        // 建立可互動格
         for (int r = 0; r < ROWS; r++)
             for (int c = 0; c < COLS; c++)
-                if (grid[r,c] is not ("空心" or "空格"))
-                    tilesByPos[(r,c)] = new Tile(-1, grid[r,c], TypeOf(grid[r,c]), r, c);
+                if (grid[r, c] is not ("空心" or "空格"))
+                    tilesByPos[(r, c)] = new Tile(-1, grid[r, c], TypeOf(grid[r, c]), r, c);
 
         // 生成外框順時針路徑
-        var path = new List<(int r,int c)>();
-        for (int c = 0; c < COLS; c++) path.Add((0,c));                    // 上
-        for (int r = 1; r < ROWS; r++) path.Add((r, COLS-1));             // 右
-        for (int c = COLS-2; c >= 0; c--) path.Add((ROWS-1,c));           // 下
-        for (int r = ROWS-2; r >= 1; r--) path.Add((r,0));                // 左
+        var path = new List<(int r, int c)>();
+        for (int c = 0; c < COLS; c++) path.Add((0, c));
+        for (int r = 1; r < ROWS; r++) path.Add((r, COLS - 1));
+        for (int c = COLS - 2; c >= 0; c--) path.Add((ROWS - 1, c));
+        for (int r = ROWS - 2; r >= 1; r--) path.Add((r, 0));
 
         int id = 0;
-        foreach (var (r,c) in path)
+        foreach (var (r, c) in path)
         {
-            var n = grid[r,c];
-            if (n is "空格" or "空心") continue; // 不進 ring
-            var t = tilesByPos[(r,c)];
+            var n = grid[r, c];
+            if (n is "空格" or "空心") continue;
+            var t = tilesByPos[(r, c)];
             var withId = new Tile(id++, t.Name, t.Type, r, c);
-            tilesByPos[(r,c)] = withId;
+            tilesByPos[(r, c)] = withId;
             ring.Add(withId);
         }
 
@@ -128,28 +147,28 @@
         week++;
 
         var tile = ring[playerIndex];
-        if (tile.Type is "City" or "Chance" or "Fate")
+        if (tile.Type is "City" or "Event")
         {
-            dialogTitle = $"抵達：{tile.Name}";
-            dialogMessage = tile.Type switch {
-                "City"   => "是否查看該縣市資料？",
-                "Chance" => "是否執行『機會』事件？",
-                "Fate"   => "是否執行『命運』事件？",
-                _        => ""
-            };
-            showDialog = true;
+            OpenCardPicker(tile);
         }
     }
 
-    void ShowCityInfo(Tile tile)
+    // 開啟卡片視窗（事件或縣市）
+    void OpenCardPicker(Tile tile)
     {
-        dialogTitle = $"{tile.Name} 資料";
-        dialogMessage = $"這裡將顯示 {tile.Name} 的永續發展資料（占位）。";
-        showDialog = true;
+        currentTile = tile;
+        currentTileTitle = $"抵達：{tile.Name}";
+        showCardPicker = true;
     }
 
-    void ConfirmEvent() => showDialog = false;
-    void CancelEvent()  => showDialog = false;
+    // 點選任一卡片：關閉視窗
+    void PickCard(int index)
+    {
+        // 可在這裡依 index 決定事件效果
+        showCardPicker = false;
+    }
+
+    void CloseCardPicker() => showCardPicker = false;
 
     bool IsCorner(string n) => n is "台南" or "台中" or "台北" or "桃園";
 }
