@@ -230,54 +230,85 @@ code {
   display:flex; align-items:center; justify-content:center; /* 置中內容 */
 }
 
-/* ===== Dialog 視窗大小與置中修正 ===== */
+/* ===== Dialog 視窗：加寬以容納五張卡 ===== */
 .dialog {
   background: #fff;             /* 白色背景 */
-  padding: 24px 32px;           /* 四周留白 */
+  padding: 24px 32px;           /* 內距 */
   border-radius: 16px;          /* 圓角 */
-  text-align: center;           /* 標題與文字置中 */
-  width: 70vw;                  /* 寬度佔視窗 70% */
-  max-width: 700px;             /* 最大寬度限制（避免太寬） */
-  box-shadow: 0 0 10px rgba(0,0,0,0.2); /* 淺陰影 */
+  text-align: center;           /* 內容置中 */
+  width: 90vw;                  /* ✅ 加寬：佔螢幕 90% */
+  max-width: 1100px;            /* ✅ 最寬限制 */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2); /* 陰影 */
   display: flex;                /* 使用 flex 垂直置中 */
   flex-direction: column;       /* 垂直排列內容 */
   align-items: center;          /* 水平置中 */
 }
 
-/* ===== 卡片容器（在白底內） ===== */
+/* ===== 卡片容器：橫向排列五張卡 ===== */
 .card-list {
-  display: flex;                /* 彈性盒排列 */
-  flex-direction: column;       /* 垂直堆疊 */
-  gap: 8px;                     /* 卡片之間距離 */
-  width: 90%;                   /* 比 dialog 窄一點 */
-  max-width: 600px;             /* 避免太寬 */
-  margin: 0 auto;               /* 置中 */
+  display: flex;                /* 彈性盒 */
+  flex-direction: row;          /* 橫向排列 */
+  gap: 16px;                    /* 卡片間距 */
+  justify-content: center;      /* 水平置中 */
+  flex-wrap: nowrap;            /* 不換行（五張卡橫放） */
+  width: 100%;
+  overflow-x: auto;             /* 若太寬可橫向捲動 */
+  padding: 8px 0;
 }
 
-/* ===== 單張卡片 ===== */
+/* ===== 單張卡片（直立版：高:寬 = 4:1） ===== */
 .card-item {
-  width: 100%;                  /* 填滿容器寬度 */
-  aspect-ratio: 5 / 1;          /* 高:寬 = 1:5 */
-  border: 2px solid #555;       /* 外框 */
-  border-radius: 10px;          /* 圓角 */
-  background: #eef;             /* 淺底 */
-  display: flex;                /* 置中內容 */
+  display: flex;
+  flex-direction: column;       /* 內容垂直排列 */
   align-items: center;
-  justify-content: center;
-  font-weight: 600;
+  justify-content: flex-start;
+  width: 190px;                 /* ✅ 寬 */
+  height: 500px;               /* ✅ 高 (4:1) */
+  border: 2px solid #555;
+  border-radius: 12px;
+  background: #f8f9fa;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   cursor: pointer;
-  user-select: none;
-  box-sizing: border-box;       /* 邊框不影響尺寸 */
-  transition: background-color 0.2s ease;
+  padding: 10px 8px;
+  box-sizing: border-box;
+  transition: transform 0.1s ease;
 }
-.card-item:hover {
-  background: #e6eaff;          /* 滑過變亮 */
-}
-.card-item:active {
-  filter: brightness(0.95);     /* 點擊變暗 */
+.card-item:hover { transform: scale(1.02); }
+.card-item:active { transform: scale(0.98); }
+
+/* 卡片上方地區名稱 */
+.card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 4px;
 }
 
-/* 隱藏頂部導覽列（包含 About 連結那條） */
-.navbar, .top-row {
-  display: none !important;
+/* 圖片區（暫時空白正方形） */
+.card-image {
+  width: 85%;          /* ✅ 放大寬度到卡片的 85% */
+  height: 160px;       /* ✅ 高度拉長一倍左右，更像主圖 */
+  background: #ddd;    /* 暫時灰底 */
+  border-radius: 8px;  /* 稍微圓角 */
+  margin: 8px 0;       /* 與上下區塊拉開距離 */
+}
+
+/* 三個屬性數值列 */
+.card-stats {
+  display: flex;
+  flex-direction: column;       /* 直排顯示三項數值 */
+  align-items: center;
+  width: 100%;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  gap: 2px;
+}
+
+/* 最下面的敘述文字 */
+.card-desc {
+  font-size: 0.8rem;
+  text-align: center;
+  color: #333;
+  margin-top: 6px;
+  white-space: pre-line;
+  padding: 0 4px;
 }

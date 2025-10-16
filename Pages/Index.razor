@@ -4,7 +4,7 @@
 <h1 style="text-align:center;">🌏 永續大富翁</h1>
 
 <div style="display:flex; justify-content:space-around; margin-bottom:20px;">
-    <div>💰 金錢：@money</div>
+    <div>💰 資產總額：@money</div>
     <div>🌿 環保評分：@ecoScore</div>
     <div>🏛️ 社會觀感：@socialScore</div>
     <div>📅 第 @week 週</div>
@@ -51,10 +51,17 @@
             <h3 style="margin-bottom:12px;">@currentTileTitle</h3>
 
             <div class="card-list">
-                @for (int i = 0; i < cardDeck.Count; i++)
+                @foreach (var card in cardDeck)
                 {
-                    <div class="card-item" @onclick='() => PickCard(i)'>
-                        @cardDeck[i]
+                    <div class="card-item" @onclick="() => PickCard(card)">
+                        <div class="card-title">@currentTile?.Name</div>
+                        <div class="card-image"></div>
+                        <div class="card-stats">
+                            <div>💰 @card.MoneyChange</div>
+                            <div>🌿 @card.EcoChange</div>
+                            <div>🏛️ @card.SocialChange</div>
+                        </div>
+                        <div class="card-desc">@card.Description</div>
                     </div>
                 }
             </div>
@@ -70,15 +77,12 @@
     int money = 0, ecoScore = 0, socialScore = 0, week = 1;
     int lastRoll = 0, playerIndex = 0;
 
-    // ===== 卡片視窗狀態 =====
     bool showCardPicker = false;
     string currentTileTitle = "";
     Tile? currentTile;
 
-    // 📝 卡片內容（可自行修改文字）
-    List<string> cardDeck = new();
+    List<CardInfo> cardDeck = new();
 
-    // ===== 棋盤排列 =====
     string[,] grid = new string[ROWS, COLS] {
         { "台南","高雄","屏東","事件","花蓮","台東","宜蘭","事件","綠島","台北" },
         { "嘉義","空心","空心","空心","空心","空心","空心","空心","空心","基隆" },
@@ -111,7 +115,6 @@
                 if (grid[r, c] is not ("空心" or "空格"))
                     tilesByPos[(r, c)] = new Tile(-1, grid[r, c], TypeOf(grid[r, c]), r, c);
 
-        // 生成外框順時針路徑
         var path = new List<(int r, int c)>();
         for (int c = 0; c < COLS; c++) path.Add((0, c));
         for (int r = 1; r < ROWS; r++) path.Add((r, COLS - 1));
@@ -147,22 +150,19 @@
         }
     }
 
-    // 開啟卡片視窗（事件或縣市）
     void OpenCardPicker(Tile tile)
     {
         currentTile = tile;
         currentTileTitle = $"抵達：{tile.Name}";
-
-        // 依縣市名稱載入對應卡片資料
+        // 從 CardData 取得該城市的卡片資料
+        // 直接從 CardData 取得完整卡片資料
         cardDeck = CardData.GetCardsForCity(tile.Name);
-
         showCardPicker = true;
     }
 
-    // 點選任一卡片：關閉視窗
-    void PickCard(int index)
+    void PickCard(CardInfo card)
     {
-        // 可在這裡依 index 決定事件效果
+        // 可在這裡加入選卡後的邏輯
         showCardPicker = false;
     }
 
