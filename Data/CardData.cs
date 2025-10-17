@@ -10,6 +10,8 @@ namespace Hackathon.Data
         public int MoneyChange { get; set; }           // 金錢變動量
         public int EcoChange { get; set; }             // 環保評分變動量
         public int SocialChange { get; set; }          // 社會觀感變動量
+
+        public string ColorTag { get; set; } = "green"; // background color
     }
 
     public static class CardData
@@ -22,14 +24,14 @@ namespace Hackathon.Data
                 // ===== 台南 =====
                 "台南" => new List<CardInfo>
                 {
-                    new CardInfo { Title = CardDESC.Title["台南"][0], Description = CardDESC.Desc["台南"][0], MoneyChange = -500, EcoChange = +10, SocialChange = +2 },
-                    new CardInfo { Title = CardDESC.Title["台南"][1], Description = CardDESC.Desc["台南"][1], MoneyChange = -200, EcoChange = +3, SocialChange = +8 },
-                    new CardInfo { Title = CardDESC.Title["台南"][2], Description = CardDESC.Desc["台南"][2], MoneyChange = -300, EcoChange = +7, SocialChange = +1 },
+                    new CardInfo { Title = CardDESC.Title["台南"][0], Description = CardDESC.Desc["台南"][0], MoneyChange = -500, EcoChange = +9, SocialChange = +2, ColorTag = "green" },
+                    new CardInfo { Title = CardDESC.Title["台南"][1], Description = CardDESC.Desc["台南"][1], MoneyChange = -200, EcoChange = +3, SocialChange = +8, ColorTag = "yellow"  },
+                    new CardInfo { Title = CardDESC.Title["台南"][2], Description = CardDESC.Desc["台南"][2], MoneyChange = -300, EcoChange = +7, SocialChange = +1, ColorTag = "red"  },
                     new CardInfo { Title = CardDESC.Title["台南"][3], Description = CardDESC.Desc["台南"][3], MoneyChange = +150, EcoChange = +4, SocialChange = +6 },
-                    new CardInfo { Title = CardDESC.Title["台南"][4], Description = CardDESC.Desc["台南"][4], MoneyChange = -500, EcoChange = +10, SocialChange = +2 },
+                    new CardInfo { Title = CardDESC.Title["台南"][4], Description = CardDESC.Desc["台南"][4], MoneyChange = -500, EcoChange = +9, SocialChange = +2 },
                     new CardInfo { Title = CardDESC.Title["台南"][5], Description = CardDESC.Desc["台南"][5], MoneyChange = -200, EcoChange = +3, SocialChange = +8 },
                     new CardInfo { Title = CardDESC.Title["台南"][6], Description = CardDESC.Desc["台南"][6], MoneyChange = -300, EcoChange = +7, SocialChange = +1 },
-                    new CardInfo { Title = CardDESC.Title["台南"][7], Description = CardDESC.Desc["台南"][7], MoneyChange = +150, EcoChange = +4, SocialChange = +6 },
+                    new CardInfo { Title = CardDESC.Title["台南"][7], Description = CardDESC.Desc["台南"][7], MoneyChange = +150, EcoChange = +4, SocialChange = +6, ColorTag = "yellow" },
                     new CardInfo { Title = CardDESC.Title["台南"][8], Description = CardDESC.Desc["台南"][8], MoneyChange = +150, EcoChange = +4, SocialChange = +6 },
                     new CardInfo { Title = CardDESC.Title["台南"][9], Description = CardDESC.Desc["台南"][9], MoneyChange = +150, EcoChange = +4, SocialChange = +6 }
                 },

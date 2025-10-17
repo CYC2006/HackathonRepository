@@ -9,7 +9,7 @@
     <div class="card-gallery">
         @foreach (var card in group.Value)
         {
-            <div class="card-item">
+            <div class="card-item @card.ColorTag">
                 <div class="card-title">@card.Title</div>
                 <div class="card-image"></div>
                 <div class="card-stats">
