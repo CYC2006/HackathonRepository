@@ -2,7 +2,7 @@
 @using Hackathon.Data
 @inject Hackathon.Data.GameState Game
 
-<h2 style="text-align:center; font-size:2.2rem; margin-top:30px; margin-bottom:30px;">
+<h2 style="text-align:center; font-size:2.2rem; margin-top:20px; margin-bottom:30px;">
     🌏 永續大富翁 🌏
 </h2>
 
@@ -67,7 +67,7 @@
                 }
             </div>
 
-            <button style="margin-top:12px;" @onclick="CloseCardPicker">關閉</button>
+            <button class="close-button" @onclick="CloseCardPicker">✖</button>
         </div>
     </div>
 }

@@ -165,10 +165,6 @@ code {
     display:flex; align-items:center; justify-content:center; /* 子內容置中 */
 }
 
-/* 中央對話框（舊樣式） */
-.dialog {
-    background:white; padding:20px; border-radius:10px; width:300px; text-align:center; /* 白底卡片 */
-}
 
 /* === Monopoly 版面（新版樣式）=== */
 .board{
@@ -276,6 +272,7 @@ code {
 
 /* ===== Dialog 視窗：加寬以容納五張卡 ===== */
 .dialog {
+  position: relative;
   background: #fff;             /* 白色背景 */
   padding: 24px 32px;           /* 內距 */
   border-radius: 16px;          /* 圓角 */
@@ -297,6 +294,7 @@ code {
   width: 100%;
   max-width: 90vw;
 }
+
 
 /* ===== 單張卡片（直立版：高:寬 = 4:1） ===== */
 .card-item {
@@ -361,7 +359,6 @@ code {
 }
 
 
-
 /* ===== Cards 頁面專用樣式 ===== */
 .card-gallery {
   display: grid;
@@ -407,3 +404,23 @@ h4 {
 .card-item.green  { background-color: #e5f7ec; } /* #34c759 蘋果綠淡色 */
 .card-item.yellow { background-color: #fff6da; } /* #ffcc00 蘋果黃淡色 */
 .card-item.red    { background-color: #fde8e8; } /* #ff3b30 蘋果紅淡色 */
+
+
+/* ===== 關閉按鈕（右上角紅色叉叉） ===== */
+.close-button {
+  position: absolute;          /* ✅ 固定在對話框右上角 */
+  top: 12px;
+  right: 16px;
+  background: transparent;     /* 沒有背景 */
+  border: none;                /* 去掉邊框 */
+  color: #000000;              /* ✅ 蘋果紅色 */
+  font-size: 1.5rem;           /* 字體大小 */
+  font-weight: bold;
+  cursor: pointer;             /* 滑鼠變成手指 */
+  transition: transform 0.1s ease, color 0.1s ease;
+}
+
+.close-button:hover {
+  color: #ff5b5b;              /* 滑過時更亮紅 */
+  transform: scale(1.2);       /* 微放大動畫 */
+}
