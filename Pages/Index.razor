@@ -1,12 +1,14 @@
 @page "/"
 @using Hackathon.Data
 
-<h1 style="text-align:center;">🌏 永續大富翁</h1>
+<h1 style="text-align:center; font-size:2.8rem; margin-top:30px; margin-bottom:40px;">
+    🌏 永續大富翁
+</h1>
 
-<div style="display:flex; justify-content:space-around; margin-bottom:20px;">
-    <div>💰 資產總額：@money</div>
-    <div>🌿 環保評分：@ecoScore</div>
-    <div>🏛️ 社會觀感：@socialScore</div>
+<div style="display:flex; justify-content:space-around; margin-bottom:40px; font-size:1.4rem; font-weight:600;">
+    <div>💰 &nbsp; &nbsp; @money</div>
+    <div>🌿 &nbsp; &nbsp; @ecoScore</div>
+    <div>🏛️ &nbsp; &nbsp; @socialScore</div>
     <div>📅 第 @week 週</div>
 </div>
 
@@ -72,7 +74,7 @@
 @code {
     const int ROWS = 6, COLS = 10;
 
-    int money = 0, ecoScore = 0, socialScore = 0, week = 1;
+    int money = 1000, ecoScore = 0, socialScore = 0, week = 1;
     int lastRoll = 0, playerIndex = 0;
 
     bool showCardPicker = false;
@@ -164,7 +166,10 @@
 
     void PickCard(CardInfo card)
     {
-        // 可在這裡加入選卡後的邏輯
+        money += card.MoneyChange;
+        ecoScore += card.EcoChange;
+        socialScore += card.SocialChange;
+
         showCardPicker = false;
     }
 

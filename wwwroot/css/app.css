@@ -270,8 +270,8 @@ code {
 /* 顯示結果的文字 */
 .dice-result {
   margin-top: 10px;
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 800;
+  font-size: 1.6rem;
 }
 
 /* ===== Dialog 視窗：加寬以容納五張卡 ===== */
