@@ -1,0 +1,29 @@
+@page "/cards"
+@using Hackathon.Data
+
+<h2 style="text-align:center;">🎴 所有卡片(台南)</h2>
+
+<div class="card-gallery">
+    @foreach (var card in tainanCards)
+    {
+        <div class="card-item">
+            <div class="card-title">@card.Title</div>
+            <div class="card-image"></div>
+            <div class="card-stats">
+                <div>💰 @card.MoneyChange</div>
+                <div>🌿 @card.EcoChange</div>
+                <div>🏛️ @card.SocialChange</div>
+            </div>
+            <div class="card-desc">@card.Description</div>
+        </div>
+    }
+</div>
+
+@code {
+    List<CardInfo> tainanCards = new();
+
+    protected override void OnInitialized()
+    {
+        tainanCards = CardData.GetCardsForCity("台南");
+    }
+}
