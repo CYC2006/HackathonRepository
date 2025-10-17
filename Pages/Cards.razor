@@ -1,29 +1,38 @@
 @page "/cards"
 @using Hackathon.Data
 
-<h2 style="text-align:center;">🎴 所有卡片(台南)</h2>
+<h2 style="text-align:center;">🎴 所有地區卡片一覽</h2>
 
-<div class="card-gallery">
-    @foreach (var card in tainanCards)
-    {
-        <div class="card-item">
-            <div class="card-title">@card.Title</div>
-            <div class="card-image"></div>
-            <div class="card-stats">
-                <div>💰 @card.MoneyChange</div>
-                <div>🌿 @card.EcoChange</div>
-                <div>🏛️ @card.SocialChange</div>
+@foreach (var group in allCards)
+{
+    <h4 style="margin-top:20px; text-align:center;">🏙️ @group.Key</h4>
+    <div class="card-gallery">
+        @foreach (var card in group.Value)
+        {
+            <div class="card-item">
+                <div class="card-title">@card.Title</div>
+                <div class="card-image"></div>
+                <div class="card-stats">
+                    <div>💰 @card.MoneyChange 🌿 @card.EcoChange 🏛️ @card.SocialChange</div>
+                </div>
+                <div class="card-desc">@card.Description</div>
             </div>
-            <div class="card-desc">@card.Description</div>
-        </div>
-    }
-</div>
+        }
+    </div>
+}
 
 @code {
-    List<CardInfo> tainanCards = new();
+    // 字典結構：城市名 -> 卡片清單
+    Dictionary<string, List<CardInfo>> allCards = new();
 
     protected override void OnInitialized()
     {
-        tainanCards = CardData.GetCardsForCity("台南");
+        // 從 CardDESC.Title 的 key 取得所有已收錄的城市
+        var cities = CardDESC.Title.Keys;
+
+        foreach (var city in cities)
+        {
+            allCards[city] = CardData.GetCardsForCity(city);
+        }
     }
 }

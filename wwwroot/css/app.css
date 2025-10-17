@@ -348,3 +348,13 @@ code {
   border-radius: 8px;
   margin: 6px 0;
 }
+
+h4 {
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.card-gallery {
+  margin-bottom: 32px; /* 每個城市之間拉開距離 */
+}
