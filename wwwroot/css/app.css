@@ -237,7 +237,7 @@ code {
   border-radius: 16px;          /* 圓角 */
   text-align: center;           /* 內容置中 */
   width: 90vw;                  /* ✅ 加寬：佔螢幕 90% */
-  max-width: 1100px;            /* ✅ 最寬限制 */
+  max-width: 900px;            /* ✅ 最寬限制 */
   box-shadow: 0 0 10px rgba(0,0,0,0.2); /* 陰影 */
   display: flex;                /* 使用 flex 垂直置中 */
   flex-direction: column;       /* 垂直排列內容 */
@@ -246,14 +246,12 @@ code {
 
 /* ===== 卡片容器：橫向排列五張卡 ===== */
 .card-list {
-  display: flex;                /* 彈性盒 */
-  flex-direction: row;          /* 橫向排列 */
-  gap: 16px;                    /* 卡片間距 */
-  justify-content: center;      /* 水平置中 */
-  flex-wrap: nowrap;            /* 不換行（五張卡橫放） */
+  display: flex;
+  flex-wrap: wrap;          /* ✅ 改成可換行排列 */
+  justify-content: center;  /* 置中排列 */
+  gap: 16px;                /* 卡片之間距離 */
   width: 100%;
-  overflow-x: auto;             /* 若太寬可橫向捲動 */
-  padding: 8px 0;
+  max-width: 90vw;
 }
 
 /* ===== 單張卡片（直立版：高:寬 = 4:1） ===== */
@@ -263,7 +261,7 @@ code {
   align-items: center;
   justify-content: flex-start;
   width: 190px;                 /* ✅ 寬 */
-  height: 500px;               /* ✅ 高 (4:1) */
+  height: 250px;               /* ✅ 高 (4:1) */
   border: 2px solid #555;
   border-radius: 12px;
   background: #f8f9fa;
@@ -285,11 +283,11 @@ code {
 
 /* 圖片區（暫時空白正方形） */
 .card-image {
-  width: 85%;          /* ✅ 放大寬度到卡片的 85% */
-  height: 160px;       /* ✅ 高度拉長一倍左右，更像主圖 */
+  width: 90%;          /* ✅ 放大寬度到卡片的 85% */
+  height: 120px;       /* ✅ 高度拉長一倍左右，更像主圖 */
   background: #ddd;    /* 暫時灰底 */
   border-radius: 8px;  /* 稍微圓角 */
-  margin: 8px 0;       /* 與上下區塊拉開距離 */
+  margin: 6px 0;       /* 與上下區塊拉開距離 */
 }
 
 /* 三個屬性數值列 */
@@ -311,4 +309,9 @@ code {
   margin-top: 6px;
   white-space: pre-line;
   padding: 0 4px;
+}
+
+/* 隱藏頂部導覽列（包含 About 連結那條） */
+.navbar, .top-row {
+  display: none !important;
 }
