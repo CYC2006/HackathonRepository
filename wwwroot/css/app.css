@@ -230,6 +230,50 @@ code {
   display:flex; align-items:center; justify-content:center; /* 置中內容 */
 }
 
+/* ===== 擲骰子按鈕樣式 ===== */
+
+.center-dice {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 骰子大正方形按鈕 */
+.dice-button {
+  width: 90px;                /* ✅ 寬度 */
+  height: 90px;               /* ✅ 高度（正方形） */
+  border: 3px solid #333;      /* 外框 */
+  border-radius: 20px;         /* 圓角 */
+  background-color: #f2f2f2;   /* 背景顏色 */
+  font-size: 48px;             /* 🎲 圖示放大 */
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* 滑過效果 */
+.dice-button:hover {
+  background-color: #e6e6e6;
+  transform: scale(1.05);
+}
+
+/* 按下效果 */
+.dice-button:active {
+  transform: scale(0.95);
+}
+
+/* 顯示結果的文字 */
+.dice-result {
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
 /* ===== Dialog 視窗：加寬以容納五張卡 ===== */
 .dialog {
   background: #fff;             /* 白色背景 */
