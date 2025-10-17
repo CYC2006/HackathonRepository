@@ -174,21 +174,21 @@ code {
 .board{
   position:relative;                    /* 供中心骰子絕對定位參考 */
   display:grid;                          /* 使用 CSS Grid 排版 */
-  grid-template-rows:repeat(6,65px);     /* 6 列，每列 65px 高 */
-  grid-template-columns:repeat(10,65px); /* 10 欄，每欄 65px 寬 */
-  gap:10px;                              /* 格與格間距，避免重疊 */
+  grid-template-rows:repeat(6,80px);     /* 6 列，每列 65px 高 */
+  grid-template-columns:repeat(10,80px); /* 10 欄，每欄 65px 寬 */
+  gap:12px;                              /* 格與格間距，避免重疊 */
   justify-content:center;                /* 水平置中整個 Grid */
   margin:0 auto;                         /* 讓整塊置中 */
 }
 
 /* 三種格子基底：正常格、空格（無字）、隱形占位 */
 .tile,.empty-tile,.void{
-  width:65px;              /* 固定寬度，避免縮放 */
-  height:65px;             /* 固定高度 */
+  width:80px;              /* 固定寬度，避免縮放 */
+  height:80px;             /* 固定高度 */
   display:flex;            /* 用 flex 置中文本 */
   align-items:center;      /* 垂直置中 */
   justify-content:center;  /* 水平置中 */
-  font-size:13px;          /* 字級 */
+  font-size:16px;          /* 字級 */
   border-radius:10px;      /* 圓角更大 */
   box-sizing:border-box;   /* 邊框不影響整體尺寸 */
 }

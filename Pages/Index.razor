@@ -2,15 +2,15 @@
 @using Hackathon.Data
 @inject Hackathon.Data.GameState Game
 
-<h1 style="text-align:center; font-size:2.8rem; margin-top:30px; margin-bottom:40px;">
-    🌏 永續大富翁
-</h1>
+<h2 style="text-align:center; font-size:2.2rem; margin-top:30px; margin-bottom:30px;">
+    🌏 永續大富翁 🌏
+</h2>
 
-<div style="display:flex; justify-content:space-around; margin-bottom:40px; font-size:1.4rem; font-weight:600;">
+<div style="display:flex; justify-content:space-around; margin-bottom:30px; font-size:1.4rem; font-weight:600;">
     <div>💰 &nbsp; &nbsp; @Game.Money</div>
     <div>🌿 &nbsp; &nbsp; @Game.EcoScore</div>
     <div>🏛️ &nbsp; &nbsp; @Game.SocialScore</div>
-    <div>📅 Week &nbsp; @Game.Week</div>
+    <div>📅 &nbsp; &nbsp; @Game.Week</div>
 </div>
 
 <div class="board">
@@ -142,7 +142,7 @@
         var rand = new Random();
         lastRoll = rand.Next(1, 7);
         playerIndex = (playerIndex + lastRoll) % ring.Count;
-        week++;
+        Game.Week++;
 
         var tile = ring[playerIndex];
         if (tile.Type is "City" or "Event")
