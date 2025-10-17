@@ -152,9 +152,13 @@
     {
         currentTile = tile;
         currentTileTitle = $"抵達：{tile.Name}";
-        // 從 CardData 取得該城市的卡片資料
-        // 直接從 CardData 取得完整卡片資料
-        cardDeck = CardData.GetCardsForCity(tile.Name);
+        // 直接從 CardData 取得完整10張卡片資料
+        var allCards = CardData.GetCardsForCity(tile.Name);
+        
+        //  pick random 4 cards
+        var rand = new Random();
+        cardDeck = allCards.OrderBy(_ => rand.Next()).Take(4).ToList();
+        
         showCardPicker = true;
     }
 

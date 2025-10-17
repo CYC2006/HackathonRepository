@@ -12,7 +12,13 @@ namespace Hackathon.Data
                 "AAA",
                 "BBB",
                 "CCC",
-                "DDD"
+                "DDD",
+                "EEE",
+                "FFF",
+                "GGG",
+                "III",
+                "JJJ",
+                "KKK"
             },
             ["台北"] = new List<string>
             {
@@ -31,13 +37,19 @@ namespace Hackathon.Data
         };
 
         // 每個城市的卡片敘述列表
-        public static readonly Dictionary<string, List<string>> Descriptions = new()
+        public static readonly Dictionary<string, List<string>> Desc = new()
         {
             ["台南"] = new List<string>
             {
                 "推動綠能示範區建設，建立地方能源轉型示範基地。",
                 "老城區文化保存計畫，平衡發展與歷史保存。",
                 "設立電動車充電站，鼓勵低碳交通使用。",
+                "推廣永續觀光活動，培育在地導覽員。",
+                "推動綠能示範區建設，建立地方能源轉型示範基地。",
+                "老城區文化保存計畫，平衡發展與歷史保存。",
+                "設立電動車充電站，鼓勵低碳交通使用。",
+                "推廣永續觀光活動，培育在地導覽員。",
+                "推廣永續觀光活動，培育在地導覽員。",
                 "推廣永續觀光活動，培育在地導覽員。"
             },
             ["台北"] = new List<string>
