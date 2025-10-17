@@ -1,15 +1,16 @@
 @page "/"
 @using Hackathon.Data
+@inject Hackathon.Data.GameState Game
 
 <h1 style="text-align:center; font-size:2.8rem; margin-top:30px; margin-bottom:40px;">
     🌏 永續大富翁
 </h1>
 
 <div style="display:flex; justify-content:space-around; margin-bottom:40px; font-size:1.4rem; font-weight:600;">
-    <div>💰 &nbsp; &nbsp; @money</div>
-    <div>🌿 &nbsp; &nbsp; @ecoScore</div>
-    <div>🏛️ &nbsp; &nbsp; @socialScore</div>
-    <div>📅 第 @week 週</div>
+    <div>💰 &nbsp; &nbsp; @Game.Money</div>
+    <div>🌿 &nbsp; &nbsp; @Game.EcoScore</div>
+    <div>🏛️ &nbsp; &nbsp; @Game.SocialScore</div>
+    <div>📅 Week &nbsp; @Game.Week</div>
 </div>
 
 <div class="board">
@@ -166,9 +167,9 @@
 
     void PickCard(CardInfo card)
     {
-        money += card.MoneyChange;
-        ecoScore += card.EcoChange;
-        socialScore += card.SocialChange;
+        Game.Money += card.MoneyChange;
+        Game.EcoScore += card.EcoChange;
+        Game.SocialScore += card.SocialChange;
 
         showCardPicker = false;
     }
