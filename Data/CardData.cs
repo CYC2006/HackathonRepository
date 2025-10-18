@@ -10,8 +10,8 @@ namespace Hackathon.Data
         public int MoneyChange { get; set; }           // 金錢變動量
         public int EcoChange { get; set; }             // 環保評分變動量
         public int SocialChange { get; set; }          // 社會觀感變動量
-
         public string ColorTag { get; set; } = "green"; // background color
+        public string? ImagePath { get; set; } = null; // iamge path
     }
 
     public static class CardData
@@ -30,7 +30,8 @@ namespace Hackathon.Data
                         MoneyChange = -500,
                         EcoChange = +9,
                         SocialChange = +2,
-                        ColorTag = "green"
+                        ColorTag = "green",
+                        ImagePath = "/images/cards/tainan-1.png"
                     },
                     new CardInfo {
                         Title = CardDESC.Title["台南"][1],

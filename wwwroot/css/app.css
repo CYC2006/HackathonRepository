@@ -327,9 +327,13 @@ code {
 .card-image {
   width: 90%;          /* ✅ 放大寬度到卡片的 85% */
   height: 120px;       /* ✅ 高度拉長一倍左右，更像主圖 */
-  background: #ddd;    /* 暫時灰底 */
   border-radius: 8px;  /* 稍微圓角 */
   margin: 6px 0;       /* 與上下區塊拉開距離 */
+  object-fit: cover;   /* 圖片不變形 */
+  background: #bbb;  /* 沒圖時灰底 */
+
+  border: 2px solid #555;  /* 黑色外框 */
+  box-sizing: border-box;  /* 避免邊框讓圖片變形 */
 }
 
 /* 三個屬性數值列 */
