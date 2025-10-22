@@ -65,6 +65,58 @@
     color: white;
 }
 
+
+/* For sidebar:Cards */
+.dropdown-area .nav-link {
+    color: #d7d7d7 !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+}
+
+/* Hover 模擬原本 NavLink 的底框效果 */
+.dropdown-area .nav-link:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 移除藍色預設 */
+.dropdown-area .dropdown-toggle {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* 子選單樣式 */
+.sub-nav {
+    margin-left: 2rem;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-link {
+    font-size: 0.9rem;
+    color: #bbb;
+    padding: 4px 0;
+    text-decoration: none;
+}
+
+.sub-link.active {
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+/**/
+
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;
