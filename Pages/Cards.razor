@@ -5,9 +5,62 @@
     🎴 地域卡片一覽 🎴
 </h2>
 
+<h2 id="region" style="text-align:left;">🃏 Regional Cards</h2>
 @foreach (var group in allCards)
 {
-    <h4 style="margin-top:20px; text-align:center;">🏙️ @group.Key</h4>
+    <h4 style="margin-top:20px; text-align:left;">🏙️ @group.Key</h4>
+    <div class="card-gallery">
+        @foreach (var card in group.Value)
+        {
+            <div class="card-item @card.ColorTag">
+                <div class="card-title">@card.Title</div>
+                @if (!string.IsNullOrEmpty(card.ImagePath))
+                {
+                    <img src="@card.ImagePath" alt="@card.Title" class="card-image" />
+                }
+                else
+                {
+                    <div class="card-image"></div>
+                }
+                <div class="card-stats">
+                    <div>💰 @card.MoneyChange 🌿 @card.EcoChange 🏛️ @card.SocialChange</div>
+                </div>
+                <div class="card-desc">@card.Description</div>
+            </div>
+        }
+    </div>
+}
+
+<h2 id="event" style="text-align:left;">🃏 Event Cards</h2>
+@foreach (var group in allCards)
+{
+    <h4 style="margin-top:20px; text-align:left;">🏙️ @group.Key</h4>
+    <div class="card-gallery">
+        @foreach (var card in group.Value)
+        {
+            <div class="card-item @card.ColorTag">
+                <div class="card-title">@card.Title</div>
+                @if (!string.IsNullOrEmpty(card.ImagePath))
+                {
+                    <img src="@card.ImagePath" alt="@card.Title" class="card-image" />
+                }
+                else
+                {
+                    <div class="card-image"></div>
+                }
+                <div class="card-stats">
+                    <div>💰 @card.MoneyChange 🌿 @card.EcoChange 🏛️ @card.SocialChange</div>
+                </div>
+                <div class="card-desc">@card.Description</div>
+            </div>
+        }
+    </div>
+}
+
+<h2 id="other" style="text-align:left;">🃏 Other Cards</h2>
+@foreach (var group in allCards)
+{
+    <h4 style="margin-top:20px; text-align:left;">🏙️ @group.Key</h4>
     <div class="card-gallery">
         @foreach (var card in group.Value)
         {

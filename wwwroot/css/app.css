@@ -1,3 +1,5 @@
+html { scroll-behavior: smooth; }
+
 /* 設定全域字型為常見的無襯線字體（由前到後回退） */
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* 主要 UI 字型 */

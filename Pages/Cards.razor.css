@@ -1,0 +1,25 @@
+/* 讓錨點滾到時別貼頂：數字改成你的頂部高度（含 navbar）*/
+#region, #event, #other {
+  scroll-margin-top: 25px;   /* 80~120 視覺最舒服自己調 */
+}
+
+/* 區塊標題本身的外距，拉開各類別的分界 */
+#region, #event, #other {
+  margin-top: 48px;
+  margin-bottom: 16px;
+  padding-top: 4px;          /* 讓標題文字不會太擠 */
+}
+
+/* 子選單之間的距離與左縮排（讓 subclass 不要太擠） */
+.sub-nav {
+  margin-top: 8px;
+  gap: 6px;                  /* 如果你的環境沒支援 gap，就拿掉這行 */
+}
+
+.sub-link {
+  display: block;
+  padding: 6px 0 6px 12px;   /* 左縮排 & 行高一致 */
+  text-decoration: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
