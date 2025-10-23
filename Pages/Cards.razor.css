@@ -1,3 +1,70 @@
+/* ===== Cards 頁面專用樣式 ===== */
+:host {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+/* 最下面的敘述文字 */
+.card-desc {
+  font-size: 0.8rem;
+  text-align: left;
+  color: #333;
+  margin-top: 6px;
+  white-space: pre-line;
+  padding: 0 4px;
+}
+
+.card-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  justify-items: center;
+  padding: 20px;
+}
+
+.card-gallery .card-item {
+  width: 188px;
+  height: 280px;
+  border: 2px solid #555;
+  border-radius: 12px;
+  background: #f8f9fa;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.card-gallery .card-image {
+  width: 90%;
+  height: 120px;
+  background: #ddd;
+  border-radius: 8px;
+  margin: 6px 0;
+}
+
+h4 {
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.card-gallery {
+  margin-bottom: 32px; /* 每個城市之間拉開距離 */
+}
+
+/* for card background color */
+.card-item.green  { background-color: #e5f7ec; } /* #34c759 蘋果綠淡色 */
+.card-item.yellow { background-color: #fff6da; } /* #ffcc00 蘋果黃淡色 */
+.card-item.red    { background-color: #fde8e8; } /* #ff3b30 蘋果紅淡色 */
+
+
 /* 讓錨點滾到時別貼頂：數字改成你的頂部高度（含 navbar）*/
 #region, #event, #other {
   scroll-margin-top: 25px;   /* 80~120 視覺最舒服自己調 */
