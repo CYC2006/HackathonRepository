@@ -6,6 +6,7 @@ namespace Hackathon.Data
         public int EcoScore { get; set; } = 0;
         public int SocialScore { get; set; } = 0;
         public int Week { get; set; } = 1;
+        public int PlayerIndex { get; set; } = 0;
 
         public void Reset()
         {

@@ -31,7 +31,7 @@
             else
             {
                 var tile = tilesByPos.TryGetValue((r, c), out var t) ? t : null;
-                bool isPlayer = tile is not null && tile.Id == playerIndex;
+                bool isPlayer = tile is not null && tile.Id == Game.PlayerIndex;
 
                 <div class="tile @(isPlayer ? "player-tile" : "") @(IsCorner(name) ? "corner" : "")"
                      @ondblclick='() => { if (tile != null && tile.Type == "City") OpenCardPicker(tile); }'>
@@ -87,7 +87,7 @@
     const int ROWS = 6, COLS = 10;
 
     int money = 1000, ecoScore = 0, socialScore = 0, week = 1;
-    int lastRoll = 0, playerIndex = 0;
+    int lastRoll = 0;
 
     bool showCardPicker = false;
     string currentTileTitle = "";
@@ -144,18 +144,20 @@
             ring.Add(withId);
         }
 
-        playerIndex = ring.FindIndex(t => t.Name == "台南");
-        if (playerIndex < 0) playerIndex = 0;
+        if (Game.PlayerIndex == 0 && Game.Week == 1)
+        {
+            Game.PlayerIndex = ring.FindIndex(t => t.Name == "台南");
+        }
     }
 
     void RollDice()
     {
         var rand = new Random();
         lastRoll = rand.Next(1, 7);
-        playerIndex = (playerIndex + lastRoll) % ring.Count;
+        Game.PlayerIndex = (Game.PlayerIndex + lastRoll) % ring.Count;
         Game.Week++;
 
-        var tile = ring[playerIndex];
+        var tile = ring[Game.PlayerIndex];
         if (tile.Type is "City" or "Event")
         {
             OpenCardPicker(tile);
