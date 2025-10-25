@@ -14,5 +14,19 @@ namespace Hackathon.Data
             SocialScore = 0;
             Week = 1;
         }
+
+        // Card Collection System
+        public List<CardInfo> CollectedCards { get; set; } = new();
+
+        public bool HasCard(CardInfo card)
+        {
+            return CollectedCards.Exists(c => c.Title == card.Title && c.Description == card.Description);
+        }
+
+        public void AddCard(CardInfo card)
+        {
+            if (!HasCard(card))
+                CollectedCards.Add(card);
+        }
     }
 }

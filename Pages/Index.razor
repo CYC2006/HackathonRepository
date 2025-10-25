@@ -58,6 +58,10 @@
                 {
                     <div class="card-item @card.ColorTag" @onclick="() => PickCard(card)">
                         <div class="card-title">@card.Title</div>
+                        <div class="card-meta">
+                            <span class="card-city">@card.City</span>
+                            <span class="card-rarity rarity-@card.Rarity">@card.Rarity</span>
+                        </div>
                         @if (!string.IsNullOrEmpty(card.ImagePath))
                         {
                             <img src="@card.ImagePath" alt="@card.Title" class="card-image" />
@@ -165,6 +169,8 @@
         // 直接從 CardData 取得完整10張卡片資料
         var allCards = CardData.GetCardsForCity(tile.Name);
         
+        foreach (var c in allCards) c.City = tile.Name;
+
         //  pick random 4 cards
         var rand = new Random();
         cardDeck = allCards.OrderBy(_ => rand.Next()).Take(4).ToList();
@@ -179,6 +185,12 @@
         Game.SocialScore += card.SocialChange;
 
         showCardPicker = false;
+
+        /* Record City */
+        var newCard = card.Clone();
+        if (currentTile != null)
+            newCard.City = currentTile.Name; // 記錄是哪個城市抽到的
+        Game.AddCard(card.Clone());
     }
 
     void CloseCardPicker() => showCardPicker = false;

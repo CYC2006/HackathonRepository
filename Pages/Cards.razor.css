@@ -1,62 +1,114 @@
-/* ===== Cards 頁面專用樣式 ===== */
-:host {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+/* ========== Card Designs ========== */
+/* Card Grid */
+.card-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+  justify-items: center;
+  padding: 20px;
+  margin-bottom: 24px;
 }
 
+.card-gallery .card-item {
+  display: flex; /* for controlling elements inside the container */
+  flex-direction: column; /* arrange contents vertically */
+  align-items: center;
+  justify-content: flex-start;
+  width: 190px;
+  height: 285px;
+  border: 2px solid #000000;
+  border-radius: 8px;
+  background: #f8f9fa;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+  padding: 8px 8px;
+  box-sizing: border-box;
+  transition: transform 0.1s ease;
+}
+.card-item.green  { background-color: #e5f7ec; } /* good card */
+.card-item.yellow { background-color: #fff6da; } /* mutual card */
+.card-item.red    { background-color: #fde8e8; } /* bad card */
+
+/* Zoom in/out when touching Cursor */
+.card-item:hover { transform: scale(1.02); }
+.card-item:active { transform: scale(0.98); }
+
+/* Card Title */
 .card-title {
   font-size: 1.1rem;
   font-weight: bold;
-  margin-bottom: 4px;
+  align-self: stretch;
+  text-align: left;
+  padding-left: 6px;
 }
 
-/* 最下面的敘述文字 */
+/* A container to store card information */
+.card-meta {
+    display: flex;
+    justify-content: space-between !important; /* Align left and right */
+    align-items: center;                /* 垂直置中 */
+    width: 100%;                        /* 撐滿整張卡的寬度 */
+    padding: 0 6px;                     /* 與卡邊留一點距離 */
+    box-sizing: border-box;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.card-city {
+    text-align: left;
+    color: #333;
+}
+
+.card-rarity {
+    font-weight: 700;
+}
+.rarity-N   { color: #5ac823; }
+.rarity-R   { color: #3588e6; }
+.rarity-SR  { color: #a065fa; }
+.rarity-SSR { color: #f1ac15; }
+.rarity-UR  { color: #e91e63; }
+
+/* Card Photo */
+.card-gallery .card-image {
+  width: 95%;
+  height: 120px;
+  border-radius: 6px;
+  margin: 2px 0;
+  object-fit: cover;   /* ensure photo not deformed */
+  background: #bbb;  /* grey background when no photo */
+  border: 2px solid #555;
+  box-sizing: border-box;
+}
+
+/* Variable Status */
+.card-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  gap: 8px;
+}
+
+/* Card Description */
 .card-desc {
   font-size: 0.8rem;
   text-align: left;
   color: #333;
-  margin-top: 6px;
+  margin-top: 4px;
+  margin-bottom: 2px;
   white-space: pre-line;
-  padding: 0 4px;
+  padding: 0 6px;
 }
-
-.card-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 10px;
-  justify-items: center;
-  padding: 20px;
-}
-
-.card-gallery .card-item {
-  width: 188px;
-  height: 280px;
-  border: 2px solid #555;
-  border-radius: 12px;
-  background: #f8f9fa;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  padding: 10px 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.card-gallery .card-image {
-  width: 90%;
-  height: 120px;
-  background: #ddd;
-  border-radius: 8px;
-  margin: 6px 0;
-}
+/* ================================== */
 
 h4 {
   margin-top: 24px;
   margin-bottom: 8px;
   font-weight: 600;
-}
-
-.card-gallery {
-  margin-bottom: 32px; /* 每個城市之間拉開距離 */
 }
 
 /* for card background color */

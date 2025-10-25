@@ -1,19 +1,28 @@
 @page "/cards"
 @using Hackathon.Data
+@inject Hackathon.Data.GameState Game
 
 <h2 style="text-align:center; font-size:2.2rem; margin-top:30px; margin-bottom:30px;">
-    🎴 地域卡片一覽 🎴
+    🎴 Collected Cards 🎴
 </h2>
 
+
 <h2 id="region" style="text-align:left;">🃏 Regional Cards</h2>
-@foreach (var group in allCards)
+@if (Game.CollectedCards.Count == 0)
 {
-    <h4 style="margin-top:20px; text-align:left;">🏙️ @group.Key</h4>
+    <h4 style="text-align:center; margin-top:20px;">----- No Card Collected -----</h4>
+}
+else
+{
     <div class="card-gallery">
-        @foreach (var card in group.Value)
+        @foreach (var card in Game.CollectedCards)
         {
             <div class="card-item @card.ColorTag">
                 <div class="card-title">@card.Title</div>
+                <div class="card-meta">
+                    <span class="card-city">@card.City</span>
+                    <span class="card-rarity rarity-@card.Rarity">@card.Rarity</span>
+                </div>
                 @if (!string.IsNullOrEmpty(card.ImagePath))
                 {
                     <img src="@card.ImagePath" alt="@card.Title" class="card-image" />
@@ -30,71 +39,28 @@
         }
     </div>
 }
+
 
 <h2 id="event" style="text-align:left;">🃏 Event Cards</h2>
-@foreach (var group in allCards)
-{
-    <h4 style="margin-top:20px; text-align:left;">🏙️ @group.Key</h4>
-    <div class="card-gallery">
-        @foreach (var card in group.Value)
-        {
-            <div class="card-item @card.ColorTag">
-                <div class="card-title">@card.Title</div>
-                @if (!string.IsNullOrEmpty(card.ImagePath))
-                {
-                    <img src="@card.ImagePath" alt="@card.Title" class="card-image" />
-                }
-                else
-                {
-                    <div class="card-image"></div>
-                }
-                <div class="card-stats">
-                    <div>💰 @card.MoneyChange 🌿 @card.EcoChange 🏛️ @card.SocialChange</div>
-                </div>
-                <div class="card-desc">@card.Description</div>
-            </div>
-        }
-    </div>
-}
-
 <h2 id="other" style="text-align:left;">🃏 Other Cards</h2>
-@foreach (var group in allCards)
-{
-    <h4 style="margin-top:20px; text-align:left;">🏙️ @group.Key</h4>
-    <div class="card-gallery">
-        @foreach (var card in group.Value)
-        {
-            <div class="card-item @card.ColorTag">
-                <div class="card-title">@card.Title</div>
-                @if (!string.IsNullOrEmpty(card.ImagePath))
-                {
-                    <img src="@card.ImagePath" alt="@card.Title" class="card-image" />
-                }
-                else
-                {
-                    <div class="card-image"></div>
-                }
-                <div class="card-stats">
-                    <div>💰 @card.MoneyChange 🌿 @card.EcoChange 🏛️ @card.SocialChange</div>
-                </div>
-                <div class="card-desc">@card.Description</div>
-            </div>
-        }
-    </div>
-}
+
 
 @code {
-    // 字典結構：城市名 -> 卡片清單
-    Dictionary<string, List<CardInfo>> allCards = new();
-
     protected override void OnInitialized()
     {
-        // 從 CardDESC.Title 的 key 取得所有已收錄的城市
-        var cities = CardDESC.Title.Keys;
-
-        foreach (var city in cities)
+        // 若有舊卡沒有 City，就自動補上
+        foreach (var card in Game.CollectedCards)
         {
-            allCards[city] = CardData.GetCardsForCity(city);
+            if (string.IsNullOrEmpty(card.City))
+                card.City = GetCityName(card);
         }
+    }
+
+    string GetCityName(CardInfo card)
+    {
+        if (card.ImagePath?.Contains("tainan", StringComparison.OrdinalIgnoreCase) == true) return "台南";
+        if (card.ImagePath?.Contains("taipei", StringComparison.OrdinalIgnoreCase) == true) return "台北";
+        if (card.ImagePath?.Contains("kaohsiung", StringComparison.OrdinalIgnoreCase) == true) return "高雄";
+        return "其他";
     }
 }

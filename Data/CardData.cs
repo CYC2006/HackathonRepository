@@ -11,7 +11,26 @@ namespace Hackathon.Data
         public int EcoChange { get; set; }             // 環保評分變動量
         public int SocialChange { get; set; }          // 社會觀感變動量
         public string ColorTag { get; set; } = "green"; // background color
-        public string? ImagePath { get; set; } = null; // iamge path
+        public string? ImagePath { get; set; } = null; // image path
+        public string Rarity { get; set; } = "N";
+
+        // clone method: ensure every card is an independent object
+        public string City { get; set; } = "";
+        public CardInfo Clone()
+        {
+            return new CardInfo
+            {
+                Title = this.Title,
+                Description = this.Description,
+                MoneyChange = this.MoneyChange,
+                EcoChange = this.EcoChange,
+                SocialChange = this.SocialChange,
+                ColorTag = this.ColorTag,
+                ImagePath = this.ImagePath,
+                City = this.City,
+                Rarity = this.Rarity
+            };
+        }
     }
 
     public static class CardData
@@ -19,7 +38,7 @@ namespace Hackathon.Data
         // 取得指定地區的卡片清單
         public static List<CardInfo> GetCardsForCity(string cityName)
         {
-            return cityName switch
+            var list = cityName switch
             {
                 // ===== 台南 =====
                 "台南" => new List<CardInfo>
@@ -31,7 +50,8 @@ namespace Hackathon.Data
                         EcoChange = +9,
                         SocialChange = +2,
                         ColorTag = "green",
-                        ImagePath = "/images/cards/tainan-1.png"
+                        ImagePath = "/images/cards/tainan-1.png",
+                        Rarity = "UR"
                     },
                     new CardInfo {
                         Title = CardDESC.Title["台南"][1],
@@ -39,7 +59,8 @@ namespace Hackathon.Data
                         MoneyChange = -200,
                         EcoChange = +3,
                         SocialChange = +8,
-                        ColorTag = "yellow"
+                        ColorTag = "yellow",
+                        Rarity = "UR"
                     },
                     new CardInfo {
                         Title = CardDESC.Title["台南"][2],
@@ -47,7 +68,8 @@ namespace Hackathon.Data
                         MoneyChange = -300,
                         EcoChange = +7,
                         SocialChange = +1,
-                        ColorTag = "red"
+                        ColorTag = "red",
+                        Rarity = "SR"
                     },
                     new CardInfo {
                         Title = CardDESC.Title["台南"][3],
@@ -55,7 +77,8 @@ namespace Hackathon.Data
                         MoneyChange = -200,
                         EcoChange = +3,
                         SocialChange = +8,
-                        ColorTag = "yellow"
+                        ColorTag = "yellow",
+                        Rarity = "UR"
                     },
                     new CardInfo {
                         Title = CardDESC.Title["台南"][4],
@@ -63,7 +86,8 @@ namespace Hackathon.Data
                         MoneyChange = -300,
                         EcoChange = +7,
                         SocialChange = +1,
-                        ColorTag = "red"
+                        ColorTag = "red",
+                        Rarity = "SSR"
                     },
                     new CardInfo {
                         Title = CardDESC.Title["台南"][5],
@@ -71,7 +95,8 @@ namespace Hackathon.Data
                         MoneyChange = -200,
                         EcoChange = +3,
                         SocialChange = +8,
-                        ColorTag = "yellow"
+                        ColorTag = "yellow",
+                        Rarity = "R"
                     },
                     new CardInfo {
                         Title = CardDESC.Title["台南"][6],
@@ -79,7 +104,8 @@ namespace Hackathon.Data
                         MoneyChange = -300,
                         EcoChange = +7,
                         SocialChange = +1,
-                        ColorTag = "red"
+                        ColorTag = "red",
+                        Rarity = "R"
                     },
                     new CardInfo {
                         Title = CardDESC.Title["台南"][7],
@@ -134,6 +160,10 @@ namespace Hackathon.Data
                     new CardInfo { Title = CardDESC.Title["台南"][3], Description = CardDESC.Desc["台南"][3], MoneyChange = +150, EcoChange = +4, SocialChange = +6 },
                 },
             };
+
+            foreach (var card in list)
+                card.City = cityName;
+            return list;
         }
     }
 }
