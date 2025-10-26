@@ -82,7 +82,7 @@ namespace Hackathon.Data
             new Row("台中", 13, -1, 0, 2, "N", " "),
             new Row("台北", 0, 0, 15, 10, "R", " "),
             new Row("台北", 1, 0, 10, 10, "R", " "),
-            new Row("台北", 2, 0, 20, 5, "SR", " "),
+            new Row("台北", 2, 0, 20, 5, "SR", ""),
             new Row("台北", 3, 0, 15, 5, "R", " "),
             new Row("台北", 4, -10, -15, -10, "R", " "),
             new Row("台北", 5, 0, -10, -15, "R", " "),
@@ -348,10 +348,41 @@ namespace Hackathon.Data
         {
             var result = new List<CardInfo>();
 
+            string CityToFolder(string c) => c switch
+            {
+                "台北" => "taipei",
+                "新北" => "newtaipei",
+                "基隆" => "keelung",
+                "宜蘭" => "yilan",
+                "花蓮" => "hualien",
+                "台東" => "taitung",
+                "台南" => "tainan",
+                "高雄" => "kaohsiung",
+                "屏東" => "pingtung",
+                "嘉義" => "chiayi",
+                "雲林" => "yunlin",
+                "彰化" => "changhua",
+                "台中" => "taichung",
+                "苗栗" => "miaoli",
+                "新竹" => "hsinchu",
+                "桃園" => "taoyuan",
+                "南投" => "nantou",
+                "澎湖" => "penghu",
+                "金馬" => "kinmenmatsu",
+                _ => c
+            };
+
             foreach (var row in Rows)
             {
                 if (row.City == city)
                 {
+                    var folder = CityToFolder(city);
+                    var img = $"/images/{folder}/{folder}{row.Index}.png";
+
+                    // if image isn't exist
+                    if (!System.IO.File.Exists($"wwwroot{img}"))
+                        img = null;
+
                     var card = new CardInfo
                     {
                         Title = CardDESC.Title[city][row.Index],
@@ -360,7 +391,7 @@ namespace Hackathon.Data
                         EcoChange = row.Eco,
                         SocialChange = row.Social,
                         Rarity = row.Rarity,
-                        ImagePath = string.IsNullOrWhiteSpace(row.ImagePath) ? null : row.ImagePath,
+                        ImagePath = img,
                         City = city   // ✅ 很重要！一定要設定
                     };
 
