@@ -157,6 +157,30 @@
   max-width: 90vw;
 }
 
+/* ===== 交通工具容器 ===== */
+.transport-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.transport-btn {
+  background: #e7f3ff;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.15s ease;
+}
+
+.transport-btn:hover {
+  background: #007bff;
+  color: white;
+}
+
 
 /* ========== Card Designs ========== */
 .card-item {
@@ -214,11 +238,11 @@
 .card-rarity {
     font-weight: 700;
 }
-.rarity-N   { color: #5ac823; }
-.rarity-R   { color: #3588e6; }
+.rarity-N   { color: #9f9f9f; }
+.rarity-R   { color: #5ac823; }
 .rarity-SR  { color: #a065fa; }
-.rarity-SSR { color: #f1ac15; }
-.rarity-UR  { color: #e91e63; }
+.rarity-SSR { color: #a065fa; }
+.rarity-UR  { color: #f1ac15; }
 
 /* Card Photo */
 .card-image {

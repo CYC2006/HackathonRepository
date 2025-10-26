@@ -47,7 +47,7 @@
     </div>
 </div>
 
-@if (showCardPicker)
+@if (showCardPicker) // when arrive City
 {
     <div class="overlay">
         <div class="dialog">
@@ -83,25 +83,93 @@
     </div>
 }
 
-@code {
-    const int ROWS = 6, COLS = 10;
+@if (showTransportPicker) // when arrive Transportation
+{
+    <div class="overlay">
+        <div class="dialog">
+            <h3>@currentTileTitle</h3>
+            <div class="transport-list">
+                @foreach (var (city, cost) in transportOptions)
+                {
+                    <button class="transport-btn" @onclick="() => TravelTo(city, cost)">
+                        @city (💰 @cost)
+                    </button>
+                }
+            </div>
+            <button class="close-button" @onclick="CloseTransportPicker">✖</button>
+        </div>
+    </div>
+}
 
+@code {
+
+    // ===== 實際票價表（單位：NTD） =====
+    static readonly Dictionary<(string type, string to), int> RealFareNTD = new()
+    {
+        // ===== 高鐵（南港出發） =====
+        { ("高鐵", "台北"), 260 },
+        { ("高鐵", "板橋"), 310 },
+        { ("高鐵", "桃園"), 500 },
+        { ("高鐵", "新竹"), 700 },
+        { ("高鐵", "苗栗"), 920 },
+        { ("高鐵", "台中"), 1330 },
+        { ("高鐵", "彰化"), 1510 },
+        { ("高鐵", "雲林"), 1510 },
+        { ("高鐵", "嘉義"), 1120 },
+        { ("高鐵", "台南"), 1390 },
+        { ("高鐵", "高雄"), 1530 },
+
+        // ===== 機場（桃園出發） =====
+        { ("機場", "台北"), 1000 },
+        { ("機場", "高雄"), 2800 },
+        { ("機場", "台中"), 2200 },
+        { ("機場", "金馬"), 2400 },
+        { ("機場", "澎湖"), 2300 },
+        { ("機場", "台南"), 2500 },
+        { ("機場", "台東"), 2700 },
+        { ("機場", "花蓮"), 3000 },
+        { ("機場", "嘉義"), 2200 },
+
+        // ===== 台鐵（台中出發） =====
+        { ("台鐵", "台北"), 375 },
+        { ("台鐵", "新北"), 350 },
+        { ("台鐵", "桃園"), 340 },
+        { ("台鐵", "新竹"), 310 },
+        { ("台鐵", "苗栗"), 120 },
+        { ("台鐵", "彰化"), 60 },
+        { ("台鐵", "雲林"), 115 },
+        { ("台鐵", "嘉義"), 180 },
+        { ("台鐵", "台南"), 250 },
+        { ("台鐵", "高雄"), 380 },
+        { ("台鐵", "屏東"), 430 },
+        { ("台鐵", "宜蘭"), 420 },
+        { ("台鐵", "花蓮"), 750 },
+        { ("台鐵", "台東"), 920 },
+        { ("台鐵", "基隆"), 410 }
+    };
+
+    // Basic Variables
+    const int ROWS = 6, COLS = 10;
     int money = 1000, ecoScore = 0, socialScore = 0, week = 1;
     int lastRoll = 0;
 
-    bool showCardPicker = false;
+
+    bool showCardPicker = false; // 
+    bool showTransportPicker = false;
+    string transportType = "";
+    List<(string city, int cost)> transportOptions = new();
     string currentTileTitle = "";
     Tile? currentTile;
 
     List<CardInfo> cardDeck = new();
 
     string[,] grid = new string[ROWS, COLS] {
-        { "台南","高雄","屏東","台鐵","事件","台東","花蓮","事件","宜蘭","台北" },
-        { "嘉義","空心","空心","空心","空心","空心","空心","空心","空心","基隆" },
-        { "事件","空心","空心","空心","空心","空心","空心","空心","空心","新北" },
-        { "雲林","空心","空心","空心","空心","空心","空心","空心","空心","事件" },
+        { "台南","高雄","屏東","事件","台東","花蓮","事件","宜蘭","基隆","高鐵" },
+        { "嘉義","空心","空心","空心","空心","空心","空心","空心","空心","新北" },
+        { "事件","空心","空心","空心","空心","空心","空心","空心","空心","事件" },
+        { "雲林","空心","空心","空心","空心","空心","空心","空心","空心","台北" },
         { "彰化","空心","空心","空心","空心","空心","空心","空心","空心","桃園" },
-        { "台中","事件","澎湖","南投","事件","苗栗","金馬","事件","新竹","機場" }
+        { "台鐵","台中","澎湖","南投","事件","苗栗","金馬","事件","新竹","機場" }
     };
 
     record Tile(int Id, string Name, string Type, int Row, int Col);
@@ -117,8 +185,8 @@
         string TypeOf(string n) => n switch
         {
             "事件" => "Event",
-            "空格" => "Empty",
             "空心" => "Void",
+            "高鐵" or "機場" or "台鐵" => "Transport",
             _ => "City"
         };
 
@@ -162,6 +230,10 @@
         {
             OpenCardPicker(tile);
         }
+        else if (tile.Type == "Transport")
+        {
+            OpenTransportPicker(tile);
+        }
     }
 
     void OpenCardPicker(Tile tile)
@@ -180,6 +252,52 @@
         showCardPicker = true;
     }
 
+    void OpenTransportPicker(Tile tile)
+    {
+        transportType = tile.Name;
+        showTransportPicker = true;
+        transportOptions.Clear();
+
+        var rand = new Random();
+
+        string[] destinations = transportType switch
+        {
+            "高鐵" => new[] { "台北","新北","桃園","新竹","苗栗","台中","彰化","雲林","嘉義","台南","高雄" },
+            "機場" => new[] { "桃園","台北","高雄","台中","金馬","澎湖","台南","台東","花蓮","嘉義" },
+            "台鐵" => new[] { "台北","新北","桃園","新竹","苗栗","台中","彰化","雲林","嘉義","台南","高雄","花蓮","台東","宜蘭","基隆" },
+            _ => Array.Empty<string>()
+        };
+
+        int baseMax = transportType switch
+        {
+            "高鐵" => 1530,
+            "機場" => 3000,
+            "台鐵" => 920,
+            _ => 1500
+        };
+
+        foreach (var dest in destinations)
+        {
+            int ntd;
+            if (RealFareNTD.TryGetValue((transportType, dest), out var fare))
+            {
+                ntd = fare;
+            }
+            else
+            {
+                // 若查不到 → 猜測距離（模擬，依序增加）
+                ntd = 500 + Array.IndexOf(destinations, dest) * 150;
+            }
+
+            // 換算成遊戲內費用（1~500）
+            int gameCost = (int)Math.Round(Math.Clamp(ntd * 500.0 / baseMax, 5, 500) / 5.0) * 5;
+            transportOptions.Add((dest, gameCost));
+
+        }
+
+        currentTileTitle = $"🚆 {transportType} 搭乘目的地";
+    }
+
     void PickCard(CardInfo card)
     {
         Game.Money += card.MoneyChange;
@@ -195,5 +313,20 @@
         Game.AddCard(card.Clone());
     }
 
+    void TravelTo(string city, int cost)
+    {
+        Game.Money -= cost;
+
+        var destination = ring.FirstOrDefault(t => t.Name == city);
+        if (destination != null)
+        {
+            Game.PlayerIndex = destination.Id;
+            showTransportPicker = false;
+            OpenCardPicker(destination); // 抵達後開啟該地卡片
+        }
+    }
+
     void CloseCardPicker() => showCardPicker = false;
+
+    void CloseTransportPicker() => showTransportPicker = false;
 }
