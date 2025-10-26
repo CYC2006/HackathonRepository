@@ -86,7 +86,7 @@
                 @foreach (var (city, cost) in transportOptions)
                 {
                     <button class="transport-btn" @onclick="() => TravelTo(city, cost)">
-                        @city (💰 @cost)
+                        @city &nbsp; $@cost
                     </button>
                 }
             </div>
@@ -112,7 +112,7 @@
     static readonly Dictionary<(string type, string to), int> RealFareNTD = new()
     {
         // 高鐵（南港出發）
-        { ("高鐵","台北"),260 },{ ("高鐵","板橋"),310 },{ ("高鐵","桃園"),500 },
+        { ("高鐵","台北"),260 },{ ("高鐵","新北"),310 },{ ("高鐵","桃園"),500 },
         { ("高鐵","新竹"),700 },{ ("高鐵","苗栗"),920 },{ ("高鐵","台中"),1330 },
         { ("高鐵","彰化"),1510 },{ ("高鐵","雲林"),1510 },{ ("高鐵","嘉義"),1120 },
         { ("高鐵","台南"),1390 },{ ("高鐵","高雄"),1530 },

@@ -158,24 +158,29 @@
 }
 
 /* ===== 交通工具容器 ===== */
+/* === 交通工具選單容器 === */
 .transport-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+  display: grid;                           /* 改用 grid 排版，方便控制欄數 */
+  grid-template-columns: repeat(6, 1fr);   /* 一列 6 個按鈕 */
+  gap: 10px;                               /* 間距一致 */
+  justify-items: center;                   /* 按鈕置中對齊 */
   margin: 16px 0;
 }
 
+/* === 交通工具目的地按鈕 === */
 .transport-btn {
-  background: #e7f3ff;
-  border: 2px solid #007bff;
-  border-radius: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.15s ease;
+  background: #e7f3ff;                     /* 原淡藍色背景 */
+  border: 2px solid #007bff;               /* 原邊框色 */
+  border-radius: 8px;                      /* 圓角 */
+  padding: 10px 0;                         /* 上下內距固定 */
+  width: 120px;                            /* ✅ 統一按鈕寬度 */
+  text-align: center;                      /* 文字置中 */
+  font-weight: 600;                        /* 粗體字 */
+  cursor: pointer;                         /* 滑鼠手勢 */
+  transition: background 0.15s ease;
 }
 
+/* hover 效果保持不變 */
 .transport-btn:hover {
   background: #007bff;
   color: white;
