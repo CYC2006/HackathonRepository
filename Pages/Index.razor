@@ -51,7 +51,7 @@
             <div class="card-list">
                 @foreach (var card in cardDeck)
                 {
-                    <div class="card-item @card.ColorTag" @onclick="() => PickCard(card)">
+                    <div class="card-item" @onclick="() => PickCard(card)">
                         <div class="card-title">@card.Title</div>
                         <div class="card-meta">
                             <span class="card-city">@card.City</span>
