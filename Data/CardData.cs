@@ -379,10 +379,6 @@ namespace Hackathon.Data
                     var folder = CityToFolder(city);
                     var img = $"/images/{folder}/{folder}{row.Index}.png";
 
-                    // if image isn't exist
-                    if (!System.IO.File.Exists($"wwwroot{img}"))
-                        img = null;
-
                     var card = new CardInfo
                     {
                         Title = CardDESC.Title[city][row.Index],
