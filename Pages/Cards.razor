@@ -17,7 +17,7 @@ else
     <div class="card-gallery">
         @foreach (var card in Game.CollectedCards)
         {
-            <div class="card-item">
+            <div class="card-item rarity-bg-@card.Rarity">
                 <div class="card-title">@card.Title</div>
                 <div class="card-meta">
                     <span class="card-city">@card.City</span>

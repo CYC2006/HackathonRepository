@@ -25,9 +25,13 @@
   box-sizing: border-box;
   transition: transform 0.1s ease;
 }
-.card-item.green  { background-color: #e5f7ec; } /* good card */
-.card-item.yellow { background-color: #fff6da; } /* mutual card */
-.card-item.red    { background-color: #fde8e8; } /* bad card */
+
+/* Background Color: rarity */
+.card-item.rarity-bg-N   { background: linear-gradient(to bottom, #f8f9fa, #e0e0e0); }
+.card-item.rarity-bg-R   { background: linear-gradient(to bottom, #d8ecff, #a8c8ff); }
+.card-item.rarity-bg-SR  { background: linear-gradient(to bottom, #f0e4ff, #c9afff); }
+.card-item.rarity-bg-SSR { background: linear-gradient(to bottom, #fff3d1, #ffd86b); }
+.card-item.rarity-bg-UR  { background: linear-gradient(to bottom, #ffe4ec, #ffb6c9); }
 
 /* Zoom in/out when touching Cursor */
 .card-item:hover { transform: scale(1.02); }
@@ -64,11 +68,11 @@
 .card-rarity {
     font-weight: 700;
 }
-.rarity-N   { color: #5ac823; }
-.rarity-R   { color: #3588e6; }
-.rarity-SR  { color: #a065fa; }
-.rarity-SSR { color: #f1ac15; }
-.rarity-UR  { color: #e91e63; }
+.rarity-N   { color: #777; }
+.rarity-R   { color: #2c6dc9; }
+.rarity-SR  { color: #7a44cc; }
+.rarity-SSR { color: #c48b00; }
+.rarity-UR  { color: #c2185b; }
 
 /* Card Photo */
 .card-gallery .card-image {
