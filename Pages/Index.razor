@@ -38,7 +38,7 @@
     }
 
     <div class="center-dice">
-        <button class="dice-button" @onclick="RollDice">🎲</button>
+        <button class="dice-button" @onclick="RollDice">🎲 MOVE</button>
         <div class="dice-result">@lastRoll</div>
     </div>
 </div>
@@ -51,7 +51,7 @@
             <div class="card-list">
                 @foreach (var card in cardDeck)
                 {
-                    <div class="card-item" @onclick="() => PickCard(card)">
+                    <div class="card-item rarity-bg-@card.Rarity" @onclick="() => PickCard(card)">
                         <div class="card-title">@card.Title</div>
                         <div class="card-meta">
                             <span class="card-city">@card.City</span>

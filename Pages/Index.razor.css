@@ -88,8 +88,8 @@
   display:flex; align-items:center; justify-content:center; /* 置中內容 */
 }
 
-/* ===== 擲骰子按鈕樣式 ===== */
 
+/* ==================== Dice Button ==================== */
 .center-dice {
   position: absolute;
   left: 50%;
@@ -103,21 +103,26 @@
 
 /* 骰子大正方形按鈕 */
 .dice-button {
-  width: 90px;                /* ✅ 寬度 */
-  height: 90px;               /* ✅ 高度（正方形） */
-  border: 3px solid #333;      /* 外框 */
-  border-radius: 20px;         /* 圓角 */
-  background-color: #f2f2f2;   /* 背景顏色 */
-  font-size: 48px;             /* 🎲 圖示放大 */
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  width: 180px;
+  height: 80px;
+  border: 4px solid #333333;      /* 外框 */
+  border-radius: 10px;         /* 圓角 */
+  color: rgba(0, 0, 0);
+  background-color: #f2f2f2;
+  font-size: 28px;
+  font-weight: 500;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+
+  transition: all 0.2s ease all;
 }
 
 /* 滑過效果 */
 .dice-button:hover {
-  background-color: #e6e6e6;
   transform: scale(1.05);
+  color: #f2f2f2;
+  background-color: #333333;
+
+  transition: 0.2s all ease;
 }
 
 /* 按下效果 */
@@ -131,6 +136,8 @@
   font-weight: 800;
   font-size: 1.6rem;
 }
+/* ===================================================== */
+
 
 /* ===== Dialog 視窗：加寬以容納四張卡 ===== */
 .dialog {
@@ -187,7 +194,7 @@
 }
 
 
-/* ========== Card Designs ========== */
+/* ==================== Card Designs ==================== */
 .card-item {
   display: flex; /* for controlling elements inside the container */
   flex-direction: column; /* arrange contents vertically */
@@ -204,9 +211,13 @@
   box-sizing: border-box;
   transition: transform 0.1s ease;
 }
-.card-item.green  { background-color: #e5f7ec; } /* good card */
-.card-item.yellow { background-color: #fff6da; } /* mutual card */
-.card-item.red    { background-color: #fde8e8; } /* bad card */
+
+/* Background Color: rarity */
+.card-item.rarity-bg-N   { background: linear-gradient(to bottom, #f8f9fa, #e0e0e0); }
+.card-item.rarity-bg-R   { background: linear-gradient(to bottom, #d8ecff, #a8c8ff); }
+.card-item.rarity-bg-SR  { background: linear-gradient(to bottom, #f0e4ff, #c9afff); }
+.card-item.rarity-bg-SSR { background: linear-gradient(to bottom, #fff3d1, #ffd86b); }
+.card-item.rarity-bg-UR  { background: linear-gradient(to bottom, #ffe4ec, #ffb6c9); }
 
 /* Zoom in/out when touching Cursor */
 .card-item:hover { transform: scale(1.02); }
@@ -243,11 +254,11 @@
 .card-rarity {
     font-weight: 700;
 }
-.rarity-N   { color: #9f9f9f; }
-.rarity-R   { color: #5ac823; }
-.rarity-SR  { color: #a065fa; }
-.rarity-SSR { color: #a065fa; }
-.rarity-UR  { color: #f1ac15; }
+.rarity-N   { color: #777; }
+.rarity-R   { color: #2c6dc9; }
+.rarity-SR  { color: #7a44cc; }
+.rarity-SSR { color: #c48b00; }
+.rarity-UR  { color: #c2185b; }
 
 /* Card Photo */
 .card-image {
@@ -282,4 +293,4 @@
   white-space: pre-line;
   padding: 0 6px;
 }
-/* ================================== */
+/* ====================================================== */
