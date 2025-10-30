@@ -14,27 +14,16 @@
 </div>
 
 <div class="board">
-    @for (int r = 0; r < ROWS; r++)
+    @foreach (var t in ring)
     {
-        for (int c = 0; c < COLS; c++)
-        {
-            var name = grid[r, c];
+        var pos = GetPos(t.Name);
+        var isPlayer = (t.Id == Game.PlayerIndex);
 
-            if (name == "空心")
-            {
-                <div class="void"></div>
-            }
-            else
-            {
-                var tile = tilesByPos.TryGetValue((r, c), out var t) ? t : null;
-                bool isPlayer = tile is not null && tile.Id == Game.PlayerIndex;
-
-                <div class="tile @(isPlayer ? "player-tile" : "")"
-                     @ondblclick='() => { if (tile != null && tile.Type == "City") OpenCardPicker(tile); }'>
-                    @name
-                </div>
-            }
-        }
+        <div class="tile @(isPlayer ? "player-tile" : "")"
+            style="left:@pos.xpx; top:@pos.ypx; width:@pos.wpx; height:@pos.hpx; line-height:@pos.hpx;"
+            @ondblclick='() => { if (t.Type == "City") OpenCardPicker(t); }'>
+            @t.Name
+        </div>
     }
 
     <div class="center-dice">
@@ -131,67 +120,142 @@
     };
 
     // 🧩 棋盤格設定
-    string[,] grid = new string[ROWS, COLS] {
-        { "台南","高雄","屏東","事件","台東","花蓮","事件","宜蘭","基隆","高鐵" },
-        { "嘉義","空心","空心","空心","空心","空心","空心","空心","空心","新北" },
-        { "事件","空心","空心","空心","空心","空心","空心","空心","空心","事件" },
-        { "雲林","空心","空心","空心","空心","空心","空心","空心","空心","台北" },
-        { "彰化","空心","空心","空心","空心","空心","空心","空心","空心","桃園" },
-        { "台鐵","台中","澎湖","南投","事件","苗栗","金馬","事件","新竹","機場" }
+    static string TypeOf(string name) => name.Trim() switch
+    {
+        "事件1" or "事件2" or "事件3" or "事件4" or "事件5" or "事件6" => "Event",
+        "高鐵" or "機場" or "台鐵" => "Transport",
+        _ => "City"
     };
 
-    record Tile(int Id, string Name, string Type, int Row, int Col);
-    Dictionary<(int r,int c), Tile> tilesByPos = new();
+    // ✅ CHANGED: 自訂「走訪順序」——骰子移動依此前進
+    // （以下先用你現有外框次序；隨時可調整/重排）
+    readonly string[] traverseOrder = new[]
+    {
+        // 上邊 10 格（左→右）
+        "台南","高雄","屏東","事件1","台東","花蓮","宜蘭","事件2","基隆","高鐵",
+        // 右邊 4 格（上→下）
+        "新北","事件3","台北","桃園",
+        // 下邊 10 格（右→左）
+        "機場","新竹","事件4","金馬","苗栗","事件5","南投","澎湖","台中","台鐵",
+        // 左邊 4 格（下→上）
+        "彰化","雲林","事件6","嘉義"
+    };
+
+    // === 自訂每個格子的座標與大小（不規則地圖） ===
+    static readonly Dictionary<string, (int x, int y, int w, int h)> CustomPos = new()
+    {
+        { "台南", (20, 20, 96, 96) },
+        { "高雄", (120, 25, 92, 92) },
+        { "屏東", (225, 35, 88, 88) },
+        { "事件1", (340, 45, 84, 84) },    // 🟩 新增事件格1
+        { "台東", (450, 50, 90, 90) },
+        { "花蓮", (560, 40, 96, 96) },
+        { "宜蘭", (670, 30, 90, 90) },
+        { "事件2", (775, 35, 84, 84) },    // 🟩 新增事件格2
+        { "基隆", (875, 25, 96, 96) },
+        { "高鐵", (960, 60, 96, 96) },
+
+        { "新北", (960, 180, 92, 92) },
+        { "事件3", (960, 295, 84, 84) },    // 🟩 新增事件格3
+        { "台北", (950, 410, 96, 96) },
+        { "桃園", (920, 460, 92, 92) },
+
+        { "機場", (880, 560, 96, 96) },
+        { "新竹", (790, 540, 92, 92) },
+        { "事件4", (700, 535, 84, 84) },    // 🟩 新增事件格4
+        { "金馬", (600, 510, 88, 88) },
+        { "苗栗", (530, 490, 90, 90) },
+        { "事件5", (440, 480, 84, 84) },    // 🟩 新增事件格5
+        { "南投", (350, 460, 96, 96) },
+        { "澎湖", (200, 460, 96, 96) },
+        { "台中", (100, 460, 96, 96) },
+        { "台鐵", (20, 450, 96, 96) },
+
+        { "彰化", (20, 380, 88, 88) },
+        { "雲林", (80, 300, 92, 92) },
+        { "事件6", (10, 200, 92, 92) },
+        { "嘉義", (20, 130, 92, 92) }
+    };
+
+    record Tile(int Id, string Name, string Type);
     List<Tile> ring = new();
 
-    protected override void OnInitialized() => BuildTilesAndRing();
+    const int BoardW = 980, BoardH = 580;  // .board 內部參考尺寸
+    const int Cell = 80;                    // 預設格大小
+    const int Gap  = 12;                    // 格與格間距
+    const int TopCount = 10;                // 上底邊格數
+    const int RightCount = 4;               // 右邊格數
+    const int BottomCount = 9;              // 下邊（除了角落已占用）
+    const int LeftCount = 3;                // 左邊格數
 
-    void BuildTilesAndRing()
+    protected override void OnInitialized()
     {
-        tilesByPos.Clear();
+        BuildRing();                        // ✅ CHANGED: 不再掃 2D；直接依序建立節點
+        if (Game.PlayerIndex < 0 || Game.Week == 1)
+            Game.PlayerIndex = ring.FindIndex(t => t.Name == "台南"); // 起點：台南
+    }
+
+    void BuildRing()
+    {
         ring.Clear();
-
-        // 🟩 類型識別修正版：確保不會誤判（Trim()）
-        string TypeOf(string n)
-        {
-            n = n.Trim();
-            return n switch
-            {
-                "事件" => "Event",
-                "高鐵" or "機場" or "台鐵" => "Transport",
-                "空心" => "Void",
-                _ => "City"
-            };
-        }
-
-        // 建立 tile map
-        for (int r = 0; r < ROWS; r++)
-        for (int c = 0; c < COLS; c++)
-            if (grid[r, c] != "空心")
-                tilesByPos[(r, c)] = new Tile(-1, grid[r, c], TypeOf(grid[r, c]), r, c);
-
-        // 🟦 生成外圈路徑，避免重複格子
-        var path = new List<(int, int)>();
-        for (int c = 0; c < COLS; c++) path.Add((0, c));
-        for (int r = 1; r < ROWS; r++) path.Add((r, COLS - 1));
-        for (int c = COLS - 2; c >= 0; c--) path.Add((ROWS - 1, c));
-        for (int r = ROWS - 2; r >= 1; r--) path.Add((r, 0));
-
-        var visited = new HashSet<(int,int)>(); // ✅ 防止重複加入
         int id = 0;
-
-        foreach (var (r, c) in path)
+        foreach (var name in traverseOrder)
         {
-            if (!visited.Add((r, c))) continue;
-            var t = tilesByPos[(r, c)];
-            var withId = new Tile(id++, t.Name, t.Type, r, c);
-            tilesByPos[(r, c)] = withId;
-            ring.Add(withId);
+            ring.Add(new Tile(id++, name, TypeOf(name)));
+        }
+    }
+
+    // ✅ CHANGED: 回傳每個名稱的座標與尺寸（優先用 CustomPos，否則算在外框上）
+    (string xpx,string ypx,string wpx,string hpx) GetPos(string name)
+    {
+        if (CustomPos.TryGetValue(name, out var p))
+            return ($"{p.x}px",$"{p.y}px",$"{p.w}px",$"{p.h}px");
+
+        // 預設外框：把 traverseOrder 投影到矩形外框
+        int idx = Array.IndexOf(traverseOrder, name);
+        if (idx < 0) return ("0px","0px",$"{Cell}px",$"{Cell}px");
+
+        // 上 10 格：0..9
+        if (idx < TopCount)
+        {
+            int x = 20 + idx * (Cell + Gap);
+            int y = 20;
+            return ($"{x}px",$"{y}px",$"{Cell}px",$"{Cell}px");
         }
 
-        // 初始化玩家位置
-        if (Game.PlayerIndex == 0 && Game.Week == 1)
-            Game.PlayerIndex = ring.FindIndex(t => t.Name == "台南");
+        // 右 4 格：10..13
+        if (idx < TopCount + RightCount)
+        {
+            int j = idx - TopCount;
+            int x = BoardW - Cell - 20;
+            int y = 20 + (j+1) * (Cell + Gap);
+            return ($"{x}px",$"{y}px",$"{Cell}px",$"{Cell}px");
+        }
+
+        // 右下角（機場）：14
+        if (idx == TopCount + RightCount)
+        {
+            int x = BoardW - Cell - 20;
+            int y = BoardH - Cell - 20;
+            return ($"{x}px",$"{y}px",$"{Cell}px",$"{Cell}px");
+        }
+
+        // 下邊（右→左）：15..23（含 9 個，因為一個角已占）
+        if (idx <= TopCount + RightCount + BottomCount)
+        {
+            int j = idx - (TopCount + RightCount + 1);
+            int x = BoardW - Cell - 20 - (j+1) * (Cell + Gap);
+            int y = BoardH - Cell - 20;
+            return ($"{x}px",$"{y}px",$"{Cell}px",$"{Cell}px");
+        }
+
+        // 左邊：剩餘
+        {
+            int j = idx - (TopCount + RightCount + BottomCount + 1);
+            int x = 20;
+            int y = BoardH - Cell - 20 - (j+1) * (Cell + Gap);
+            return ($"{x}px",$"{y}px",$"{Cell}px",$"{Cell}px");
+        }
     }
 
     void RollDice()
