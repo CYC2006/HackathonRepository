@@ -1,13 +1,13 @@
 # Project Name: 
 
 ## Code Path
-# Game Map
+### Game Map
 - Pages/Index.razor
 - Pages/Index.razor.css
-# Cards
+### Cards
 - Pages/Cards.razor
 - Pages/Cards.razor.css
-# Statistics
+### Statistics
 - Pages/Statistics.razor
 - Pages/Statistics.razor.css
 

@@ -1,0 +1,104 @@
+@page "/analytics"
+@using Hackathon.Data
+@inject GameState Game
+
+<h2 class="ana-title">📈 Analytics</h2>
+
+<div class="ana-wrap">
+    <svg class="ana-svg" @onmouseleave="() => hoverWeek = null">
+        <!-- 畫布與線條、圖例等內容保持不變 -->
+        @* ...整個 SVG 內容原樣放這裡... *@
+    </svg>
+
+    <div class="ana-footer">
+        <div>Current: W@Game.Week / 48</div>
+        <div>💰 @history.LastOrDefault()?.Money ?? 0</div>
+        <div>🌿 @history.LastOrDefault()?.EcoScore ?? 0</div>
+        <div>🤝 @history.LastOrDefault()?.SocialScore ?? 0</div>
+    </div>
+</div>
+
+@code {
+    const int W = 960, H = 420, L = 56, R = 56, T = 24, B = 36;
+    int plotW => W - L - R;
+    int plotH => H - T - B;
+
+    List<DataPoint> history = new();
+    int ecoMin, ecoMax, socMin, socMax, moneyMin, moneyMax;
+    double leftMin, leftMax, rightMin, rightMax;
+    int? hoverWeek = null;
+    bool built = false;
+
+    int GetMaxWeek() => Math.Min(Game.Week, 48);
+
+    string Polyline(IEnumerable<(double x, double y)> pts)
+        => string.Join(" ", pts.Select(p => $"{p.x:F1},{p.y:F1}"));
+
+    double MapX(int week)
+    {
+        double t = (double)(week - 1) / (48 - 1);
+        return L + t * plotW;
+    }
+
+    double MapYLeft(double v)
+    {
+        if (leftMax - leftMin < 1e-9) return T + plotH / 2.0;
+        double t = (v - leftMin) / (leftMax - leftMin);
+        return T + (1 - t) * plotH;
+    }
+
+    double MapYRight(double v)
+    {
+        if (rightMax - rightMin < 1e-9) return T + plotH / 2.0;
+        double t = (v - rightMin) / (rightMax - rightMin);
+        return T + (1 - t) * plotH;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            BuildHistory();
+            built = true;
+            StateHasChanged();
+        }
+    }
+
+    void BuildHistory()
+    {
+        var rand = new Random(12345);
+        int money = 1000, eco = 0, social = 0;
+
+        for (int w = 1; w <= GetMaxWeek(); w++)
+        {
+            money += rand.Next(-40, 120);
+            eco += rand.Next(-2, 5);
+            social += rand.Next(-3, 4);
+
+            history.Add(new DataPoint { Week = w, Money = money, EcoScore = eco, SocialScore = social });
+        }
+
+        ecoMin = history.Min(p => p.EcoScore);
+        ecoMax = history.Max(p => p.EcoScore);
+        socMin = history.Min(p => p.SocialScore);
+        socMax = history.Max(p => p.SocialScore);
+        moneyMin = history.Min(p => p.Money);
+        moneyMax = history.Max(p => p.Money);
+
+        leftMin = Math.Min(ecoMin, socMin);
+        leftMax = Math.Max(ecoMax, socMax);
+        if (leftMax == leftMin) { leftMin -= 1; leftMax += 1; }
+
+        rightMin = moneyMin;
+        rightMax = moneyMax;
+        if (rightMax == rightMin) { rightMin -= 1; rightMax += 1; }
+    }
+
+    private class DataPoint
+    {
+        public int Week { get; set; }
+        public int Money { get; set; }
+        public int EcoScore { get; set; }
+        public int SocialScore { get; set; }
+    }
+}
