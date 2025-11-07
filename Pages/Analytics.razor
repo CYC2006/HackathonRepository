@@ -35,3 +35,50 @@
         </table>
     }
 </div>
+
+
+<!-- Chart -->
+@if (Game.History.Count > 0)
+{
+    <div class="chart-wrap">
+        <svg width="1000" height="500" style="background:#e5e5e5; border-radius:12px;">
+
+            @* 取得 Money 範圍 *@
+            @{
+                const double baseY = 300;     // 底線固定在 y=300
+                const double pxPerMoney = 1.0 / 1.0; // 5元 = 1px（固定比例）
+            }
+
+            @* 底線 *@
+            <line x1="0" y1="@baseY" x2="1000" y2="@baseY" stroke="#444" stroke-width="2" />
+
+            @* 折線 *@
+            @{
+                var points = new List<string>();
+                for (int i = 0; i < Game.History.Count; i++)
+                {
+                    double x = 50 + i * 20; // 每週往右 20px，左邊留 50px margin
+                    double y = baseY - (Game.History[i].Money - 1000) * pxPerMoney;
+                    points.Add($"{x},{y}");
+                }
+                string linePoints = string.Join(" ", points);
+            }
+            <polyline points="@linePoints" fill="none" stroke="#FFD700" stroke-width="3" />
+
+            @* 各週圓點 *@
+            @for (int i = 0; i < Game.History.Count; i++)
+            {
+                double x = 50 + i * 20;
+                double y = baseY - (Game.History[i].Money - 1000) * pxPerMoney;
+                var val = Game.History[i].Money;
+
+                <g class="data-point" style="pointer-events: all;">
+                    <!-- 🟢 黃色圓點，初始半徑 r=4 -->
+                    <circle cx="@x" cy="@y" r="6" fill="#EFD110" />
+                    <!-- 🟢 上方的文字標籤，預設隱藏 -->
+                    <text x="@x" y="@(y - 14)" class="data-label">@val</text>
+                </g>
+            }
+        </svg>
+    </div>
+}

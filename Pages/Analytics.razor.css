@@ -35,3 +35,94 @@
 .record-table tr:hover {
   background-color: #f1f1f1;
 }
+
+
+/* Chart Style */
+.table-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.record-table {
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 700px;
+  font-size: 1rem;
+  background: #ffffff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.record-table th {
+  background-color: #1565c0;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.record-table td {
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  padding: 8px;
+}
+
+.record-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.record-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* ? */
+.chart-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+
+.chart-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+
+/* Chart Line Style */
+.data-point {
+  pointer-events: all;
+}
+
+.data-point circle {
+  transition: transform 0.1s ease-in-out;
+  stroke: none;
+  cursor: pointer;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.data-point:hover circle {
+  transform: scale(1.5);
+  stroke: black;
+  stroke-width: 2px;
+}
+
+/* 🟢 資料標籤：預設透明 */
+.data-label {
+  font-size: 14px;
+  fill: #333;
+  opacity: 0;
+  text-anchor: middle;     /* ✏️ 文字置中 */
+  transition: opacity 0.1s ease-in-out;
+  pointer-events: none;    /* 🟢 不擋滑鼠 */
+}
+
+/* 🟢 Hover 顯示文字 */
+.data-point:hover .data-label {
+  opacity: 1;
+}
