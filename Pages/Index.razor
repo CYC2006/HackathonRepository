@@ -143,16 +143,17 @@
     // Game Block Position and Size Setting
     static readonly Dictionary<string, (int x, int y, int w, int h)> CustomPos = new()
     {
-        { "台南", (20, 20, 96, 96) },
-        { "高雄", (120, 25, 92, 92) },
-        { "屏東", (225, 35, 88, 88) },
-        { "事件1", (340, 45, 84, 84) },
-        { "台東", (450, 50, 90, 90) },
-        { "花蓮", (560, 40, 96, 96) },
-        { "宜蘭", (670, 30, 90, 90) },
-        { "事件2", (775, 35, 84, 84) },
-        { "基隆", (875, 25, 96, 96) },
-        { "高鐵", (960, 60, 96, 96) },
+        { "台南", (20, 50, 96, 96) },
+        { "高雄", (120, 35, 92, 92) },
+        { "屏東", (225, 25, 88, 88) },
+        
+        { "事件1", (340, 20, 84, 84) },
+        { "台東", (450, 10, 90, 90) },
+        { "花蓮", (560, 25, 96, 96) },
+        { "宜蘭", (670, 45, 90, 90) },
+        { "事件2", (775, 50, 84, 84) },
+        { "基隆", (875, 65, 96, 96) },
+        { "高鐵", (960, 80, 96, 96) },
 
         { "新北", (960, 180, 92, 92) },
         { "事件3", (960, 295, 84, 84) },
@@ -262,7 +263,6 @@
         var rand = new Random();
         lastRoll = rand.Next(1, 7);
         Game.PlayerIndex = (Game.PlayerIndex + lastRoll) % ring.Count;
-        Game.Week++;
 
         // 🟩 確保每回合只有一種視窗會開啟
         showCardPicker = false;
@@ -328,6 +328,9 @@
         var newCard = card.Clone();
         if (currentTile != null) newCard.City = currentTile.Name;
         Game.AddCard(newCard);
+
+        Game.RecordWeek();
+        Game.Week++;
     }
 
     void TravelTo(string city, int cost)
