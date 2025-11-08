@@ -1,3 +1,5 @@
+using System.Reflection.Metadata.Ecma335;
+
 namespace Hackathon.Data
 {
     public class GameState
@@ -10,6 +12,18 @@ namespace Hackathon.Data
         public int PlayerIndex { get; set; } = 0;
 
 
+        // Sustain Cards
+        public class Effect
+        {
+            public string Title { get; set; } = ""; // card name
+            public string TargetVar { get; set; } = ""; // type: Money, EcoScore, SocialScore
+            public int MinChange { get; set; } // min of change
+            public int MaxChange { get; set; } // max of change
+            public int Duration { get; set; } // week duration
+        }
+        public List<Effect> OngoingEffects { get; set; } = new();
+
+
         // Weekly Record System
         public class WeeklyRecord
         {
@@ -17,11 +31,14 @@ namespace Hackathon.Data
             public int EcoScore { get; set; }
             public int SocialScore { get; set; }
         }
-
         public List<WeeklyRecord> History { get; set; } = new();
 
+
+        // Game Initialize
         public GameState() { RecordWeek(); }
 
+
+        // Record when end of week
         public void RecordWeek()
         {
             History.Add(new WeeklyRecord
@@ -59,5 +76,48 @@ namespace Hackathon.Data
             if (!HasCard(card))
                 CollectedCards.Add(card);
         }
+
+
+        // Sustain Card Collection System
+        public void AddOngoingEffect(string source, string target, int min, int max, int duration)
+        {
+            int endWeek = (duration == -1) ? 48 : Week + duration;
+            OngoingEffects.Add(new Effect
+            {
+                Title = source,
+                TargetVar = target,
+                MinChange = min,
+                MaxChange = max,
+                Duration = duration // -1 means permanent
+            });
+        }
+
+        public void ApplyWeeklyEffects()
+        {
+            var rand = new Random();
+            var expired = new List<Effect>(); // for store Cards that duration = 0
+
+            foreach (var e in OngoingEffects)
+            {
+                int delta = rand.Next(e.MinChange, e.MaxChange + 1);
+
+                switch (e.TargetVar)
+                {
+                    case "Money": Money += delta; break;
+                    case "EcoScore": EcoScore += delta; break;
+                    case "SocialScore": SocialScore += delta; break;
+                }
+
+                if (e.Duration > 0)
+                {
+                    e.Duration--;
+                    if (e.Duration == 0) expired.Add(e);
+                }
+            }
+
+            foreach (var e in expired) OngoingEffects.Remove(e);
+        }
+
+        public void ClearEffects() => OngoingEffects.Clear();   
     }
 }

@@ -297,7 +297,7 @@
 
     void OpenTransportPicker(Tile tile)
     {
-        if (tile.Type != "Transport") return; // ✅ 防止誤觸 City 格
+        if (tile.Type != "Transport") return; // 防止誤觸 City 格
         transportType = tile.Name;
         showTransportPicker = true;
         transportOptions.Clear();
@@ -313,7 +313,7 @@
         foreach (var dest in destinations)
         {
             if (RealFareNTD.TryGetValue((transportType, dest), out var fare))
-                transportOptions.Add((dest, fare)); // ✅ 防呆，避免 KeyNotFound
+                transportOptions.Add((dest, fare)); // 防呆，避免 KeyNotFound
         }
 
         currentTileTitle = $"🚆 {transportType} 搭乘目的地";
@@ -329,6 +329,21 @@
         if (currentTile != null) newCard.City = currentTile.Name;
         Game.AddCard(newCard);
 
+        // Check for Sustain Card
+        var effectData = SustainCardData.GetEffect(card.Title);
+        if (effectData != null)
+        {
+            Game.AddOngoingEffect(
+                source: effectData.Til,
+                target: effectData.Tar,
+                min: effectData.Min,
+                max: effectData.Max,
+                duration: effectData.Dur
+            );
+        }
+
+        // next week
+        Game.ApplyWeeklyEffects();
         Game.RecordWeek();
         Game.Week++;
     }

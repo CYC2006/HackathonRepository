@@ -4,51 +4,18 @@
 
 <h2 style="text-align:center; margin:20px 0;">📊 Game Progress</h2>
 
-<div class="table-container">
-    @if (Game.History.Count == 0)
-    {
-        <p>No record yet.</p>
-    }
-    else
-    {
-        <table class="record-table">
-            <thead>
-                <tr>
-                    <th>Week</th>
-                    <th>Money 💰</th>
-                    <th>Eco 🌿</th>
-                    <th>Social 🤝</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Game.History.Count; i++)
-                {
-                    var rec = Game.History[i];
-                    <tr>
-                        <td>@i</td>
-                        <td>@rec.Money</td>
-                        <td>@rec.EcoScore</td>
-                        <td>@rec.SocialScore</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-</div>
-
-
 <!-- Chart -->
 @if (Game.History.Count > 0)
 {
     <div class="chart-wrap">
-        <svg width="1000" height="500" style="background:#e5e5e5; border-radius:12px;">
+        <svg width="1000" height="600" style="background:#e5e5e5; border-radius:12px;">
 
             <!-- Get Range and Scale -->
             @{
-                const double baseY = 300;
-                const double moneyScale = 1.0 / 1.0;
-                const double ecoScale = 3.0;
-                const double socialScale = 3.0;
+                const double baseY = 400;
+                const double moneyScale = 1.0 / 5.0;
+                const double ecoScale = 2.0;
+                const double socialScale = 2.0;
             }
 
             <!-- Bottom Line -->
@@ -133,7 +100,7 @@
             }
 
             <!-- Keys -->
-            <g transform="translate(720,450)">
+            <g transform="translate(720,550)">
                 <rect width="16" height="16" fill="#EFD110" />
                 <text x="20" y="14" font-size="14px">Money</text>
                 <rect x="100" width="16" height="16" fill="#00C853" />
@@ -144,3 +111,36 @@
         </svg>
     </div>
 }
+
+<!-- Table -->
+<div class="table-container">
+    @if (Game.History.Count == 0)
+    {
+        <p>No record yet.</p>
+    }
+    else
+    {
+        <table class="record-table">
+            <thead>
+                <tr>
+                    <th>Week</th>
+                    <th>Money 💰</th>
+                    <th>Eco 🌿</th>
+                    <th>Social 🤝</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Game.History.Count; i++)
+                {
+                    var rec = Game.History[i];
+                    <tr>
+                        <td>@i</td>
+                        <td>@rec.Money</td>
+                        <td>@rec.EcoScore</td>
+                        <td>@rec.SocialScore</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
