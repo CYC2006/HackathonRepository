@@ -42,6 +42,7 @@ else
 
 
 <h2 id="sustain" style="text-align:left;">🃏 Sustain Cards</h2>
+
 @if (Game.OngoingEffects.Count == 0)
 {
     <h4 style="text-align:center; margin-top:20px;">----- No Ongoing Cards -----</h4>
@@ -51,27 +52,44 @@ else
     <div class="card-gallery">
         @foreach (var e in Game.OngoingEffects)
         {
-            <div class="card-item rarity-bg-SR">
-                <div class="card-title">@e.Title</div>
-                <div class="card-meta">
-                    <span class="card-city">@e.TargetVar</span>
-                    <span class="card-rarity rarity-SR">
-                        @(e.Duration == -1 ? "∞" : $"{e.Duration}W")
-                    </span>
-                </div>
-                <div class="card-desc" style="text-align:left;">
-                    每週影響：
-                    @if (e.MinChange == e.MaxChange)
+            CardInfo? baseCard = null;
+
+            // 🔍 自動搜尋所有城市的卡片資料
+            foreach (var city in CardDESC.Title.Keys)
+            {
+                var found = CardData.GetCardsForCity(city)
+                                    .FirstOrDefault(c => c.Title == e.Title);
+                if (found is not null)
+                {
+                    baseCard = found;
+                    break;
+                }
+            }
+
+            if (baseCard is not null)
+            {
+                <div class="card-item rarity-bg-@baseCard.Rarity">
+                    <div class="card-title">@baseCard.Title</div>
+                    <div class="card-meta">
+                        <span class="card-city">@baseCard.City</span>
+                        <span class="card-rarity rarity-@baseCard.Rarity">@baseCard.Rarity</span>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(baseCard.ImagePath))
                     {
-                        <b>@e.MinChange</b>
+                        <img src="@baseCard.ImagePath" alt="@baseCard.Title" class="card-image" />
                     }
                     else
                     {
-                        <b>@e.MinChange ~ @e.MaxChange</b>
+                        <div class="card-image"></div>
                     }
-                    至 @e.TargetVar
+
+                    <div class="card-stats">
+                        <div>💰 @baseCard.MoneyChange 🌿 @baseCard.EcoChange 🏛️ @baseCard.SocialChange</div>
+                    </div>
+                    <div class="card-desc">@baseCard.Description</div>
                 </div>
-            </div>
+            }
         }
     </div>
 }
