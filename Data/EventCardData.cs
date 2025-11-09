@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Hackathon.Data
 {
     public class EventCardInfo
     {
+        public string Title { get; set; } = "";
         public string Description { get; set; } = "";
         public int MoneyChange { get; set; }
         public int EcoChange { get; set; }
@@ -17,6 +19,7 @@ namespace Hackathon.Data
         {
             return new EventCardInfo
             {
+                Title = this.Title,
                 Description = this.Description,
                 MoneyChange = this.MoneyChange,
                 EcoChange = this.EcoChange,
@@ -63,6 +66,7 @@ namespace Hackathon.Data
 
                     var card = new EventCardInfo
                     {
+                        Title = EventCardDESC.Title[type][row.Index],
                         Description = EventCardDESC.Desc[type][row.Index],
                         MoneyChange = row.Money,
                         EcoChange = row.Eco,
