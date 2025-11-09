@@ -129,7 +129,7 @@
             @foreach (var card in eventCardDeck)
             {
                 <div class="event-card">
-                    <div class="event-card-type">【@card.Type】</div>
+                    <div class="event-card-type">【@card.Type】@card.Title</div>
 
                     @if (!string.IsNullOrEmpty(card.ImagePath))
                     {
@@ -378,7 +378,8 @@
     {
         int currentMonth = ((Game.Week - 1) / 4) + 1;
 
-        var allEvents = EventCardData.GetAllEventCards("四季");
+        var allEvents = EventCardData.GetAllEventCards(
+            new[] { "四季", "天災", "經濟", "政策", "環境", "社會" }[new Random().Next(6)] );
 
         var validEvents = allEvents
             .Where(e => currentMonth >= e.StartMonth && currentMonth <= e.EndMonth)
@@ -397,7 +398,6 @@
         Game.EcoScore += card.EcoChange;
         Game.SocialScore += card.SocialChange;
 
-        // Record the change as a new week (if你想算進週報)
         Game.RecordWeek();
         Game.Week++;
 
