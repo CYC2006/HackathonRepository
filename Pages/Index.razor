@@ -2,50 +2,67 @@
 @using Hackathon.Data
 @inject Hackathon.Data.GameState Game
 
-<h2 style="text-align:center; font-size:2.4rem; margin-top:28px; margin-bottom:36px;">
-    🌏 永續大富翁 🌏
-</h2>
+<div class="game-layout">
+    <!-- 🟦 中間：地圖 -->
+    <div class="board-container">
+        <div class="board">
+            <svg class="path-lines" width="100%" height="100%">
+                @for (int step = 0; step < lastRoll; step++)
+                {
+                    int fromIndex = (lastStartIndex + step) % ring.Count;
+                    int toIndex = (fromIndex + 1) % ring.Count;
 
-<div style="display:flex; justify-content:space-around; margin-bottom:30px; font-size:1.4rem; font-weight:600;">
-    <div>💰 &nbsp;&nbsp; @Game.Money</div>
-    <div>🌿 &nbsp;&nbsp; @Game.EcoScore</div>
-    <div>🏛️ &nbsp;&nbsp; @Game.SocialScore</div>
-    <div>📅 &nbsp;&nbsp; @Game.Week</div>
-</div>
+                    var from = GetPos(ring[fromIndex].Name);
+                    var to = GetPos(ring[toIndex].Name);
 
-<div class="board">
-    <svg class="path-lines" width="100%" height="100%">
-        @for (int step = 0; step < lastRoll; step++)
-        {
-            int fromIndex = (lastStartIndex + step) % ring.Count;
-            int toIndex = (fromIndex + 1) % ring.Count;
+                    <line x1="@from.cx" y1="@from.cy" x2="@to.cx" y2="@to.cy" stroke="#ffc107" stroke-width="3" stroke-linecap="round" />
+                }
+            </svg>
 
-            var from = GetPos(ring[fromIndex].Name);
-            var to = GetPos(ring[toIndex].Name);
+            @foreach (var t in ring)
+            {
+                var pos = GetPos(t.Name);
+                var isPlayer = (t.Id == Game.PlayerIndex);
 
-            <line x1="@from.cx" y1="@from.cy" x2="@to.cx" y2="@to.cy" stroke="#ffc107" stroke-width="3" stroke-linecap="round" />
-        }
-    </svg>
+                <div class="tile @(isPlayer ? "player-tile" : $"{t.Type.ToLower()}-tile")"
+                    style="left:@pos.xpx; top:@pos.ypx;"
+                    @ondblclick='() => { if (t.Type == "City") OpenCardPicker(t); }'>
+                    <div class="dot"></div>
+                    <div class="label">@t.Name</div>
+                </div>
+            }
 
-    @foreach (var t in ring)
-    {
-        var pos = GetPos(t.Name);
-        var isPlayer = (t.Id == Game.PlayerIndex);
-
-        <div class="tile @(isPlayer ? "player-tile" : $"{t.Type.ToLower()}-tile")"
-            style="left:@pos.xpx; top:@pos.ypx;"
-            @ondblclick='() => { if (t.Type == "City") OpenCardPicker(t); }'>
-            <div class="dot"></div>
-            <div class="label">@t.Name</div>
+            @if (!isRolling && !showCardPicker && !showTransportPicker)
+            {
+                <div class="dice-container" style="left:@diceX; top:@diceY;">
+                    <button class="dice-button" @onclick="RollDice">🎲</button>
+                </div>
+            }
         </div>
-    }
+    </div>
 
-    @if (!isRolling && !showCardPicker && !showTransportPicker)
-    {
-        <div class="player-dice" style="left:@diceX; top:@diceY;">
-            <button class="dice-button" @onclick="RollDice">🎲</button>
+    <!-- 🟨 右邊：標題與數值 -->
+    <div class="right-panel">
+        <h2 class="game-title">🌏 永續大富翁 🌏</h2>
+        <div class="stats">
+            <div>
+                <img src="/images/icons/Dollar.png" class="icon" alt="Money" />
+                <span>@Game.Money</span>
+            </div>
+            <div>
+                <img src="/images/icons/EcoScore.png" class="icon" alt="Eco" />
+                <span>@Game.EcoScore</span>
+            </div>
+            <div>
+                <img src="/images/icons/SocialScore.png" class="icon" alt="Social" />
+                <span>@Game.SocialScore</span>
+            </div>
+            <div>
+                <img src="/images/icons/Week.png" class="icon" alt="Week" />
+                <span>@Game.Week</span>
+            </div>
         </div>
-    }
+    </div>
 </div>
 
 @if (showCardPicker)
@@ -160,34 +177,34 @@
     // Game Block Position and Size Setting
     static readonly Dictionary<string, (int x, int y, int w, int h)> CustomPos = new()
     {
-        { "台南", (360, 800, 96, 96) },
-        { "高雄", (475, 835, 92, 92) },
-        { "台鐵", (415, 910, 96, 96) },
-        { "屏東", (445, 985, 88, 88) },
-        { "台東", (590, 870, 90, 90) },
-        { "事件1", (620, 785, 84, 84) },
-        { "花蓮", (705, 550, 96, 96) },
-        { "宜蘭", (770, 310, 90, 90) },
-        { "事件2", (785, 220, 84, 84) },
-        { "新北", (800, 170, 92, 92) },
-        { "基隆", (790, 120, 96, 96) },
-        { "高鐵", (740, 115, 96, 96) },
-        { "台北", (745, 140, 96, 96) },
-        { "事件3", (695, 145, 84, 84) },
-        { "桃園", (645, 185, 92, 92) },
-        { "機場", (620, 160, 96, 96) },
-        { "新竹", (620, 270, 92, 92) },
-        { "事件4", (590, 320, 84, 84) },
-        { "苗栗", (540, 340, 90, 90) },
-        { "金馬", (255, 295, 88, 88) },
-        { "台中", (500, 440, 96, 96) },
-        { "南投", (560, 560, 96, 96) },
-        { "事件5", (455, 535, 84, 84) },
-        { "彰化", (400, 520, 88, 88) },
-        { "雲林", (380, 605, 92, 92) },
-        { "澎湖", (160, 655, 96, 96) },
-        { "嘉義", (395, 685, 92, 92) },
-        { "事件6", (355, 720, 92, 92) }
+        { "台南", (200, 522, 96, 96) },
+        { "高雄", (280, 544, 92, 92) },
+        { "台鐵", (242, 596, 96, 96) },
+        { "屏東", (262, 650, 88, 88) },
+        { "台東", (354, 570, 90, 90) },
+        { "事件1", (370, 504, 84, 84) },
+        { "花蓮", (430, 380, 96, 96) },
+        { "宜蘭", (480, 196, 90, 90) },
+        { "事件2", (484, 130, 84, 84) },
+        { "新北", (500, 100, 92, 92) },
+        { "基隆", (496, 62, 96, 96) },
+        { "高鐵", (460, 58, 96, 96) },
+        { "台北", (466, 80, 96, 96) },
+        { "事件3", (426, 82, 84, 84) },
+        { "桃園", (400, 116, 92, 92) },
+        { "機場", (386, 88, 96, 96) },
+        { "新竹", (378, 160, 92, 92) },
+        { "事件4", (350, 174, 84, 84) },
+        { "苗栗", (326, 210, 90, 90) },
+        { "金馬", (130, 184, 88, 88) },
+        { "台中", (294, 280, 96, 96) },
+        { "南投", (342, 362, 96, 96) },
+        { "事件5", (266, 344, 84, 84) },
+        { "彰化", (234, 330, 88, 88) },
+        { "雲林", (220, 388, 92, 92) },
+        { "澎湖", (74, 422, 96, 96) },
+        { "嘉義", (230, 442, 92, 92) },
+        { "事件6", (198, 468, 92, 92) }
     };
 
     record Tile(int Id, string Name, string Type);
@@ -238,8 +255,8 @@
     {
         var tile = ring[Game.PlayerIndex];
         var pos = GetPos(tile.Name);
-        diceX = $"{pos.cx + 50}px";   // 稍微往左一點
-        diceY = $"{pos.cy - 30}px";
+        diceX = $"{pos.cx + 40}px";   // 稍微往左一點
+        diceY = $"{pos.cy - 5}px";
     }
 
     async void RollDice()
@@ -282,7 +299,7 @@
     void OpenCardPicker(Tile tile)
     {
         currentTile = tile;
-        currentTileTitle = $"抵達：{tile.Name}";
+        currentTileTitle = $"{tile.Name}";
         var allCards = CardData.GetCardsForCity(tile.Name);
         foreach (var c in allCards) c.City = tile.Name;
         var rand = new Random();

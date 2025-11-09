@@ -1,4 +1,13 @@
 /* ==================== Board Map ==================== */
+.game-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px 20px;
+}
+
 .board {
   position: relative;
   width: 1000px;
@@ -6,11 +15,58 @@
   margin: 0 auto;
 
   background-image: url('/images/taiwan.png'); /* ← 改成你的圖片檔名 */
-  background-size: 90% auto;         /* 讓圖片覆蓋整個畫面 */
-  background-position: 50% 0%;    /* 置中顯示 */
+  background-size: 60% auto;         /* 讓圖片覆蓋整個畫面 */
+  background-position: 0% -2%;    /* 置中顯示 */
   background-repeat: no-repeat;   /* 不重複平鋪 */
   border-radius: 12px;            /* （可選）加一點圓角讓邊緣更柔和 */
 }
+
+/* ===================================================== */
+
+
+/* ==================== Title & Variables ==================== */
+.right-panel {
+  background-color: #a8c8ff;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
+  padding-top: 20px;
+  margin-left: -300px;
+}
+
+.game-title {
+  background-color: #fff3e0;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.stats div {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 10px 10px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain; /* remain undistroted */
+}
+
+.stats span {
+  font-weight: 700;
+  color: #222;
+}
+
+/* ===================================================== */
+
 
 .tile {
   position: absolute;
@@ -21,7 +77,7 @@
   transform: translate(-50%, -50%); /* 讓圓點以座標為中心 */
 }
 
-/* 小圓點 */
+/* circle dot */
 .tile .dot {
   width: 20px;
   height: 20px;
@@ -89,11 +145,10 @@
 
 
 /* ==================== Dice Button ==================== */
-/* 顯示結果的文字 */
-.dice-result {
-  margin-top: 10px;
-  font-weight: 800;
-  font-size: 1.6rem;
+.dice-container {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
 }
 
 .player-dice {
@@ -103,8 +158,8 @@
 }
 
 .dice-button {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border: 3px solid #333;
   border-radius: 12px;
   background: #fff;
