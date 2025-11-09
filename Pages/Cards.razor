@@ -41,26 +41,40 @@ else
 }
 
 
-<h2 id="event" style="text-align:left;">🃏 Event Cards</h2>
-<h2 id="other" style="text-align:left;">🃏 Other Cards</h2>
-
-
-@code {
-    protected override void OnInitialized()
-    {
-        // 若有舊卡沒有 City，就自動補上
-        foreach (var card in Game.CollectedCards)
-        {
-            if (string.IsNullOrEmpty(card.City))
-                card.City = GetCityName(card);
-        }
-    }
-
-    string GetCityName(CardInfo card)
-    {
-        if (card.ImagePath?.Contains("tainan", StringComparison.OrdinalIgnoreCase) == true) return "台南";
-        if (card.ImagePath?.Contains("taipei", StringComparison.OrdinalIgnoreCase) == true) return "台北";
-        if (card.ImagePath?.Contains("kaohsiung", StringComparison.OrdinalIgnoreCase) == true) return "高雄";
-        return "其他";
-    }
+<h2 id="sustain" style="text-align:left;">🃏 Sustain Cards</h2>
+@if (Game.OngoingEffects.Count == 0)
+{
+    <h4 style="text-align:center; margin-top:20px;">----- No Ongoing Cards -----</h4>
 }
+else
+{
+    <div class="card-gallery">
+        @foreach (var e in Game.OngoingEffects)
+        {
+            <div class="card-item rarity-bg-SR">
+                <div class="card-title">@e.Title</div>
+                <div class="card-meta">
+                    <span class="card-city">@e.TargetVar</span>
+                    <span class="card-rarity rarity-SR">
+                        @(e.Duration == -1 ? "∞" : $"{e.Duration}W")
+                    </span>
+                </div>
+                <div class="card-desc" style="text-align:left;">
+                    每週影響：
+                    @if (e.MinChange == e.MaxChange)
+                    {
+                        <b>@e.MinChange</b>
+                    }
+                    else
+                    {
+                        <b>@e.MinChange ~ @e.MaxChange</b>
+                    }
+                    至 @e.TargetVar
+                </div>
+            </div>
+        }
+    </div>
+}
+
+
+<h2 id="other" style="text-align:left;">🃏 Event Cards</h2>

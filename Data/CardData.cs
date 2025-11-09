@@ -364,7 +364,7 @@ namespace Hackathon.Data
                 "桃園" => "taoyuan",
                 "南投" => "nantou",
                 "澎湖" => "penghu",
-                "金馬" => "kinmenmatsu",
+                "金馬" => "kinma",
                 _ => c
             };
 

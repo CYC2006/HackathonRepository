@@ -1,34 +1,72 @@
-/* ✅ CHANGED: 棋盤容器，固定畫布，供絕對定位 */
-.board{
+/* ==================== Board Map ==================== */
+.board {
   position: relative;
   width: 960px;
   height: 600px;
   margin: 0 auto;
   background: transparent;
+  transform: translateX(240px); /* ✅ 往右平移 sidebar 寬度 */
 }
 
-/* 每個格子改為絕對定位，尺寸由 inline style 控制 */
-.tile{
+.tile {
   position: absolute;
-  border: 2px solid #555;
-  border-radius: 8px;
-  background: #eef;
+  background: none;
+  border: none;
   text-align: center;
-  font-size: 16px;
-  font-weight: 600;
-  box-sizing: border-box;
   cursor: pointer;
+  transform: translate(-50%, -50%); /* 讓圓點以座標為中心 */
+}
+
+/* 小圓點 */
+.tile .dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #4a90e2; /* 預設藍色 */
+  border: 2px solid white;
+  box-shadow: 0 0 3px rgba(0,0,0,0.4);
   transition: transform 0.1s ease;
 }
-.tile:hover { transform: scale(1.03); }
 
-/* 玩家所在格 */
-.player-tile{
-  background: #ffc107;
-  color: #000;
+/* 滑過時放大圓點 */
+.tile:hover .dot {
+  transform: scale(1.3);
 }
 
-/* 中央骰子維持原本置中 */
+/* 玩家所在點（橘黃色） */
+.player-tile .dot {
+  background-color: #ffc107;
+  border: 2px solid #fff;
+  box-shadow: 0 0 8px rgba(255,193,7,0.8);
+}
+
+/* 縣市或事件名稱標籤 */
+.tile .label {
+  position: absolute;
+  bottom: 28px;               /* 顯示在圓點上方 */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.9);
+  color: #000;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;       /* 避免遮擋滑鼠 */
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+/* 滑鼠移上時才顯示標籤 */
+.tile:hover .label {
+  opacity: 1;
+}
+
+/* ===================================================== */
+
+
+/* ==================== Center Dice ==================== */
 .center-dice{
   position:absolute; left:50%; top:50%;
   transform:translate(-50%,-50%);
@@ -52,6 +90,9 @@
   position:fixed; inset:0; background:rgba(0,0,0,.4); /* 佔滿視窗，半透明黑 */
   display:flex; align-items:center; justify-content:center; /* 置中內容 */
 }
+
+/* ===================================================== */
+
 
 /* ==================== Dice Button ==================== */
 .center-dice {
@@ -154,6 +195,7 @@
   background: #007bff;
   color: white;
 }
+/* ====================================================== */
 
 
 /* ==================== Card Designs ==================== */
