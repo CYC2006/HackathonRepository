@@ -35,10 +35,11 @@ namespace Hackathon.Data
 
         private static readonly Row[] Rows = new Row[]
         {
-            new Row("四季", 0, 50, 20, 15, 2, 5, " "),
+            new Row("四季", 0, 80, 0, 4, 2, 5, ""),
+            new Row("四季", 1, -100, 4, 3, 4, 6, ""),
         };
 
-        public static List<EventCardInfo> GetCardsForCity(string type)
+        public static List<EventCardInfo> GetAllEventCards(string type)
         {
             var result = new List<EventCardInfo>();
 
@@ -66,6 +67,8 @@ namespace Hackathon.Data
                         MoneyChange = row.Money,
                         EcoChange = row.Eco,
                         SocialChange = row.Social,
+                        StartMonth = row.Start,
+                        EndMonth = row.End,
                         ImagePath = img,
                         Type = type
                     };

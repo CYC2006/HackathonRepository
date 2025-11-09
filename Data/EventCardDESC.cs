@@ -10,6 +10,7 @@ namespace Hackathon.Data
             ["四季"] = new List<string>
             {
                 "春暖花開吸引遊客，地方商機上升但交通擁擠。",
+                "梅雨季降臨，水庫補水充足但農作延誤。",
             },
             
         };

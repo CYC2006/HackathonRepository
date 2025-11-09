@@ -337,3 +337,56 @@
   padding: 0 6px;
 }
 /* ====================================================== */
+
+
+/* ==================== Event Card ==================== */
+.event-card-dialog {
+  background: rgba(0,0,0,0.6);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.event-card {
+  background: #fffdf5;
+  border: 3px solid #e0c040;
+  border-radius: 10px;
+  padding: 16px;
+  width: 250px;
+  margin: 0 auto;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+.event-card-type {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #b8860b;
+  margin-bottom: 8px;
+}
+
+.event-card-image {
+  width: 90%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border: 2px solid #ccc;
+}
+
+.event-card-desc {
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
+  white-space: pre-line;
+}
+
+.event-card-stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-weight: 600;
+  color: #444;
+}
+
+/* ====================================================== */
