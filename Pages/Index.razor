@@ -40,10 +40,12 @@
         </div>
     }
 
-    <div class="center-dice">
-        <button class="dice-button" @onclick="RollDice">🎲 MOVE</button>
-        <div class="dice-result">@lastRoll</div>
-    </div>
+    @if (!isRolling && !showCardPicker && !showTransportPicker)
+    {
+        <div class="player-dice" style="left:@diceX; top:@diceY;">
+            <button class="dice-button" @onclick="RollDice">🎲</button>
+        </div>
+    }
 </div>
 
 @if (showCardPicker)
@@ -102,7 +104,9 @@
     const int ROWS = 6, COLS = 10;
     int lastRoll = 0;
     int lastStartIndex = 0;
-
+    string diceX = "0px";
+    string diceY = "0px";
+    bool isRolling = false;
     bool showCardPicker = false;
     bool showTransportPicker = false;
     string transportType = "";
@@ -202,6 +206,8 @@
         BuildRing();                        // ✅ CHANGED: 不再掃 2D；直接依序建立節點
         if (Game.PlayerIndex < 0 || Game.Week == 1)
             Game.PlayerIndex = ring.FindIndex(t => t.Name == "台南"); // 起點：台南
+
+        UpdateDicePosition();
     }
 
     void BuildRing()
@@ -228,31 +234,49 @@
         return ("0px", "0px", "0px", "0px", 0, 0);
     }
 
-    void RollDice()
+    void UpdateDicePosition()
     {
+        var tile = ring[Game.PlayerIndex];
+        var pos = GetPos(tile.Name);
+        diceX = $"{pos.cx + 50}px";   // 稍微往左一點
+        diceY = $"{pos.cy - 30}px";
+    }
+
+    async void RollDice()
+    {
+        // avoid double clicking
+        if (isRolling) return;
+        isRolling = true;
+
         var rand = new Random();
         lastRoll = rand.Next(1, 7);
         lastStartIndex = Game.PlayerIndex;
-        Game.PlayerIndex = (Game.PlayerIndex + lastRoll) % ring.Count;
+        // Game.PlayerIndex = (Game.PlayerIndex + lastRoll) % ring.Count;
 
         // make sure only one window will show every round
         showCardPicker = false;
         showTransportPicker = false;
 
-        var tile = ring[Game.PlayerIndex];
+        // moving animation
+        for (int i = 0; i < lastRoll; i++)
+        {
+            Game.PlayerIndex = (Game.PlayerIndex + 1) % ring.Count;
 
+            StateHasChanged();
+            await Task.Delay(250);
+        }
+
+        var tile = ring[Game.PlayerIndex];
         switch (tile.Type)
         {
-            case "City":
-                OpenCardPicker(tile);
-                break;
-            case "Transport":
-                OpenTransportPicker(tile);
-                break;
-            case "Event":
-                // 未來可接事件邏輯
-                break;
+            case "City": OpenCardPicker(tile); break;
+            case "Transport": OpenTransportPicker(tile); break;
+            case "Event": break;
         }
+
+        isRolling = false;
+        UpdateDicePosition();
+        StateHasChanged();
     }
 
     void OpenCardPicker(Tile tile)

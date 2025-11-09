@@ -82,55 +82,46 @@
 .overlay{
   position:fixed; inset:0; background:rgba(0,0,0,.4); /* 佔滿視窗，半透明黑 */
   display:flex; align-items:center; justify-content:center; /* 置中內容 */
+  z-index: 1000;
 }
 
 /* ===================================================== */
 
 
 /* ==================== Dice Button ==================== */
-.center-dice {
-  position: absolute;
-  left: 20%;
-  top: 10%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* 骰子大正方形按鈕 */
-.dice-button {
-  width: 180px;
-  height: 80px;
-  border: 4px solid #333333;
-  border-radius:10px;
-  color: rgba(0, 0, 0);
-  background-color: #f2f2f2;
-  font-size: 28px;
-  font-weight: 500;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-
-  transition: all 0.2s ease all;
-}
-
-/* 滑過效果 */
-.dice-button:hover {
-  color: #f2f2f2;
-  background-color: #333333;
-
-  transition: 0.2s all ease;
-}
-
-/* 按下效果 */
-.dice-button:active {
-  transform: scale(0.95);
-}
-
 /* 顯示結果的文字 */
 .dice-result {
   margin-top: 10px;
   font-weight: 800;
   font-size: 1.6rem;
+}
+
+.player-dice {
+  position: absolute;
+  transform: translate(-50%, 0); /* 水平置中，不往上偏移 */
+  z-index: 10;
+}
+
+.dice-button {
+  width: 60px;
+  height: 60px;
+  border: 3px solid #333;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.dice-button:hover {
+  background: #333;
+  color: white;
+  transform: scale(1.05);
+}
+
+.dice-button:active {
+  transform: scale(0.95);
 }
 /* ===================================================== */
 
