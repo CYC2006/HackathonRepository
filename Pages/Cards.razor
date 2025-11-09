@@ -54,7 +54,7 @@ else
         {
             CardInfo? baseCard = null;
 
-            // 🔍 自動搜尋所有城市的卡片資料
+            // search for all card data
             foreach (var city in CardDESC.Title.Keys)
             {
                 var found = CardData.GetCardsForCity(city)
@@ -85,9 +85,24 @@ else
                     }
 
                     <div class="card-stats">
-                        <div>💰 @baseCard.MoneyChange 🌿 @baseCard.EcoChange 🏛️ @baseCard.SocialChange</div>
+                        <div>
+                            @switch (e.TargetVar)
+                            {
+                                case "Money":
+                                    <text>💰 @e.MinChange ~ @e.MaxChange / week</text>;
+                                    break;
+                                case "EcoScore":
+                                    <text>🌿 @e.MinChange ~ @e.MaxChange / week</text>;
+                                    break;
+                                case "SocialScore":
+                                    <text>🏛️ @e.MinChange ~ @e.MaxChange / week</text>;
+                                    break;
+                            }
+                        </div>
+
+                        @if (e.Duration == -1) { <div>🕓 Permanent Effect</div> }
+                        else { <div>⏳ @e.Duration week remaining</div> }
                     </div>
-                    <div class="card-desc">@baseCard.Description</div>
                 </div>
             }
         }

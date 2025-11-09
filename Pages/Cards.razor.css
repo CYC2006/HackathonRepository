@@ -15,7 +15,6 @@
   align-items: center;
   justify-content: flex-start;
   width: 190px;
-  height: 285px;
   border: 2.5px solid #000000;
   border-radius: 8px;
   background: #f8f9fa;
@@ -24,6 +23,14 @@
   padding: 8px 8px;
   box-sizing: border-box;
   transition: transform 0.1s ease;
+}
+
+.card-item.region {
+  height: 285px;
+}
+
+.card-item.sustain {
+  height: 230px;
 }
 
 /* Background Color: rarity */
