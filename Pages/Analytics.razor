@@ -4,115 +4,149 @@
 
 <h2 style="text-align:center; margin:20px 0;">📊 Game Progress</h2>
 
-<!-- Chart -->
 @if (Game.History.Count > 0)
 {
     <div class="chart-wrap">
         <svg width="1000" height="600" style="background:#e5e5e5; border-radius:12px;">
-
-            <!-- Get Range and Scale -->
             @{
-                const double baseY = 400;
-                const double moneyScale = 1.0 / 20.0;
-                const double ecoScale = 2.0;
-                const double socialScale = 2.0;
+                // === 基本畫布設定 ===
+                const double chartTop = 80;
+                const double chartBottom = 530;
+                const double xStart = 80;
+                const double xStep = 20;
+                const double leftAxisX = 60;
+                const double rightAxisX = 950;
+                const int gridCount = 8;     // 八條線
+                const int baseLineIndex = 2; // 第三條為準線
+                const double spacing = (chartBottom - chartTop) / (gridCount - 1);
+
+                // === 讀取資料 ===
+                double minMoney = Game.History.Min(h => h.Money);
+                double maxMoney = Game.History.Max(h => h.Money);
+                double minEco = Game.History.Min(h => h.EcoScore);
+                double maxEco = Game.History.Max(h => h.EcoScore);
+                double minSoc = Game.History.Min(h => h.SocialScore);
+                double maxSoc = Game.History.Max(h => h.SocialScore);
+
+                // === Eco/Social 共用 ===
+                double minRightRaw = Math.Min(minEco, minSoc);
+                double maxRightRaw = Math.Max(maxEco, maxSoc);
+
+                // === Money 軸動態範圍 ===
+                // ＊改動點：用 stepM 控制；上界=5*stepM，下界=-2*stepM。
+                //   初始 stepM=1000（對應 -2000~5000）；如超界，每次 +100（→ 上界+500、下界-200）。
+                int stepM = 1000;
+                while (5 * stepM < maxMoney) stepM += 100;   // 擴上界
+                while (-2 * stepM > minMoney) stepM += 100;  // 擴下界
+                double moneyMin = -2 * stepM;
+                double moneyMax =  5 * stepM;
+
+                // === Eco/Social 軸動態範圍 ===
+                // ＊改動點：用 stepR 控制；上界=5*stepR，下界=-2*stepR。
+                //   初始 stepR=20（對應 -40~100）；如超界，每次 +10（→ 上界+50、下界-20）。
+                int stepR = 20;
+                while (5 * stepR < maxRightRaw) stepR += 10;   // 擴上界
+                while (-2 * stepR > minRightRaw) stepR += 10;  // 擴下界
+                double rightMin = -2 * stepR;
+                double rightMax =  5 * stepR;
+
+                // === 座標轉換 ===
+                double ToY(double val, double minVal, double maxVal)
+                    => chartBottom - (val - minVal) / (maxVal - minVal) * (chartBottom - chartTop);
+
+                double MoneyToY(double v) => ToY(v, moneyMin, moneyMax);
+                double RightToY(double v) => ToY(v, rightMin, rightMax);
+
+                // === 橫線間距 ===
+                // ＊改動點：刻度間距改由 stepM/stepR 控制，但橫線仍為固定八等分（不依比例）。
+                double stepMoney = (moneyMax - moneyMin) / (gridCount - 1);
+                double stepRight = (rightMax - rightMin) / (gridCount - 1);
             }
 
-            <!-- Bottom Line -->
-            <line x1="0" y1="@baseY" x2="1000" y2="@baseY" stroke="#444" stroke-width="2" />
-
-            <!-- Money Line -->
-            @{
-                var moneyPoints = new List<string>();
-                for (int i = 0; i < Game.History.Count; i++)
-                {
-                    double x = 50 + i * 20;
-                    double y = baseY - (Game.History[i].Money - 1000) * moneyScale;
-                    moneyPoints.Add($"{x},{y}");
-                }
-                string moneyLinePoints = string.Join(" ", moneyPoints);
+            <!-- x axes -->
+            @for (int i = 0; i < gridCount; i++)
+            {
+                double y = chartBottom - i * spacing;
+                string style = i == baseLineIndex ? "stroke:#000;stroke-width:2;" : "stroke:#ccc;stroke-dasharray:3,3;";
+                <line x1="@leftAxisX" y1="@y" x2="@rightAxisX" y2="@y" style="@style" />
             }
-            <polyline points="@moneyLinePoints" fill="none" stroke="#FFD700" stroke-width="3" />
 
-            <!-- Eco Line -->
-            @{
-                var ecoPoints = new List<string>();
-                for (int i = 0; i < Game.History.Count; i++)
-                {
-                    double x = 50 + i * 20; // 每週往右 20px，左邊留 50px margin
-                    double y = baseY - (Game.History[i].EcoScore) * ecoScale;
-                    ecoPoints.Add($"{x},{y}");
-                }
-                string ecoLinePoints = string.Join(" ", ecoPoints);
+            <!-- y axes -->
+            <line x1="@leftAxisX" y1="@chartTop" x2="@leftAxisX" y2="@chartBottom" stroke="#000" stroke-width="2" />
+            <line x1="@rightAxisX" y1="@chartTop" x2="@rightAxisX" y2="@chartBottom" stroke="#000" stroke-width="2" />
+
+            <!-- === Left axes: Money === -->
+            @for (int i = 0; i < gridCount; i++)
+            {
+                double v = moneyMin + i * stepMoney;
+                double y = MoneyToY(v);
+                <g>
+                    <text x="@(leftAxisX - 8)" y="@(y + 4)" text-anchor="end" font-size="12">@Math.Round(v)</text>
+                </g>
             }
-            <polyline points="@ecoLinePoints" fill="none" stroke="#00C853" stroke-width="3" />
+            <image href="/images/icons/Money.png" x="45" y="@(chartTop - 35)" width="30" height="30" />
 
-            <!-- Social Line -->
-            @{
-                var socialPoints = new List<string>();
-                for (int i = 0; i < Game.History.Count; i++)
-                {
-                    double x = 50 + i * 20; // 每週往右 20px，左邊留 50px margin
-                    double y = baseY - (Game.History[i].SocialScore) * socialScale;
-                    socialPoints.Add($"{x},{y}");
-                }
-                string socialLinePoints = string.Join(" ", socialPoints);
+            <!-- === Right axes: Eco/Social === -->
+            @for (int i = 0; i < gridCount; i++)
+            {
+                double v = rightMin + i * stepRight;
+                double y = RightToY(v);
+                <g>
+                    <text x="@(rightAxisX + 12)" y="@(y + 4)" font-size="12" text-anchor="start">@Math.Round(v)</text>
+                </g>
             }
-            <polyline points="@socialLinePoints" fill="none" stroke="#2979FF" stroke-width="3" />
+            <image href="/images/icons/EcoScore.png" x="935" y="@(chartTop - 65)" width="28" height="28" />
+            <image href="/images/icons/SocialScore.png" x="935" y="@(chartTop - 35)" width="28" height="28" />
 
-            <!-- Money Dot -->
+            <!-- === 折線繪製 === -->
+            @{
+                var moneyPts = Game.History.Select((h, i) => $"{xStart + i * xStep},{MoneyToY(h.Money)}");
+                var ecoPts   = Game.History.Select((h, i) => $"{xStart + i * xStep},{RightToY(h.EcoScore)}");
+                var socPts   = Game.History.Select((h, i) => $"{xStart + i * xStep},{RightToY(h.SocialScore)}");
+            }
+
+            <polyline points="@string.Join(" ", moneyPts)" fill="none" stroke="#FFD700" stroke-width="3" />
+            <polyline points="@string.Join(" ", ecoPts)" fill="none" stroke="#00C853" stroke-width="3" />
+            <polyline points="@string.Join(" ", socPts)" fill="none" stroke="#2979FF" stroke-width="3" />
+
+            <!-- === 資料點 === -->
             @for (int i = 0; i < Game.History.Count; i++)
             {
-                double x = 50 + i * 20;
-                double y = baseY - (Game.History[i].Money - 1000) * moneyScale;
-                var val = Game.History[i].Money;
+                double x = xStart + i * xStep;
+                double yM = MoneyToY(Game.History[i].Money);
+                double yE = RightToY(Game.History[i].EcoScore);
+                double yS = RightToY(Game.History[i].SocialScore);
 
-                <g class="data-point" style="pointer-events: all;">
-                    <circle cx="@x" cy="@y" r="6" fill="#EFD110" />
-                    <text x="@x" y="@(y - 14)" class="data-label">@val</text>
+                <g class="data-point">
+                    <circle cx="@x" cy="@yM" r="6" fill="#E6B800" />
+                    <text x="@x" y="@(yM - 12)" class="data-label">@Game.History[i].Money</text>
+                </g>
+                <g class="data-point">
+                    <circle cx="@x" cy="@yE" r="6" fill="#009624" />
+                    <text x="@x" y="@(yE - 12)" class="data-label">@Game.History[i].EcoScore</text>
+                </g>
+                <g class="data-point">
+                    <circle cx="@x" cy="@yS" r="6" fill="#0D47A1" />
+                    <text x="@x" y="@(yS - 12)" class="data-label">@Game.History[i].SocialScore</text>
                 </g>
             }
 
-            <!-- Eco Dot -->
-            @for (int i = 0; i < Game.History.Count; i++)
-            {
-                double x = 50 + i * 20;
-                double y = baseY - (Game.History[i].EcoScore) * ecoScale;
-                var val = Game.History[i].EcoScore;
+            <!-- === 圖例 (Legend) === -->
+            <g transform="translate(600,570)">
+                <circle cx="0" cy="0" r="8" fill="#FFD700" />
+                <text x="10" y="5" font-size="16">Money</text>
 
-                <g class="data-point" style="pointer-events: all;">
-                    <circle cx="@x" cy="@y" r="6" fill="#009624" />
-                    <text x="@x" y="@(y - 14)" class="data-label">@val</text>
-                </g>
-            }
+                <circle cx="120" cy="0" r="8" fill="#00C853" />
+                <text x="130" y="5" font-size="16">EcoScore</text>
 
-            <!-- Social Dot -->
-            @for (int i = 0; i < Game.History.Count; i++)
-            {
-                double x = 50 + i * 20;
-                double y = baseY - (Game.History[i].SocialScore) * socialScale;
-                var val = Game.History[i].SocialScore;
-
-                <g class="data-point" style="pointer-events: all;">
-                    <circle cx="@x" cy="@y" r="6" fill="#0D47A1" />
-                    <text x="@x" y="@(y - 14)" class="data-label">@val</text>
-                </g>
-            }
-
-            <!-- Keys -->
-            <g transform="translate(720,550)">
-                <rect width="16" height="16" fill="#EFD110" />
-                <text x="20" y="14" font-size="14px">Money</text>
-                <rect x="100" width="16" height="16" fill="#00C853" />
-                <text x="120" y="14" font-size="14px">Eco</text>
-                <rect x="180" width="16" height="16" fill="#2979FF" />
-                <text x="200" y="14" font-size="14px">Social</text>
+                <circle cx="240" cy="0" r="8" fill="#2979FF" />
+                <text x="250" y="5" font-size="16">SocialScore</text>
             </g>
         </svg>
     </div>
 }
 
-<!-- Table -->
+<!-- === 資料表 === -->
 <div class="table-container">
     @if (Game.History.Count == 0)
     {
