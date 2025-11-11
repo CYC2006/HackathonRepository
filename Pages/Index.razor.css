@@ -11,7 +11,7 @@
 .board {
   position: relative;
   width: 1000px;
-  height: 1600px;
+  height: 820px;
   margin: 0 auto;
 
   background-image: url('/images/taiwan.png'); /* ← 改成你的圖片檔名 */
