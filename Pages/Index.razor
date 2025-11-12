@@ -70,7 +70,7 @@
 {
     <div class="overlay">
         <div class="dialog">
-            <h3 style="margin-bottom:12px;">@currentTileTitle</h3>
+            <h3 style="margin-bottom:20px;">@currentTileTitle</h3>
             <div class="card-list">
                 @foreach (var card in cardDeck)
                 {
@@ -89,7 +89,20 @@
                             <div class="card-image"></div>
                         }
                         <div class="card-stats">
-                            <div>💰 @card.MoneyChange 🌿 @card.EcoChange 🏛️ @card.SocialChange</div>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <span>
+                                    <img src="/images/icons/Money.png" alt="Money" width="20" height="20" />
+                                    @card.MoneyChange
+                                </span>
+                                <span>
+                                    <img src="/images/icons/EcoScore.png" alt="Eco" width="20" height="20" />
+                                    @card.EcoChange
+                                </span>
+                                <span>
+                                    <img src="/images/icons/SocialScore.png" alt="Social" width="20" height="20" />
+                                    @card.SocialChange
+                                </span>
+                            </div>
                         </div>
                         <div class="card-desc">@card.Description</div>
                     </div>
@@ -151,12 +164,10 @@
                     </div>
                 </div>
             }
-
             <button class="close-button" @onclick="() => showEventCard = false">✖</button>
         </div>
     </div>
 }
-
 
 @code {
     const int ROWS = 6, COLS = 10;
