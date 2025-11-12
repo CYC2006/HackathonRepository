@@ -24,9 +24,9 @@
             @if (showCards)
             {
                 <div class="sub-nav">
-                    <NavLink class="nav-link sub-link" href="cards#region">Regional Cards</NavLink>
-                    <NavLink class="nav-link sub-link" href="cards#event">Sustain Cards</NavLink>
-                    <NavLink class="nav-link sub-link" href="cards#other">Event Cards</NavLink>
+                    <a class="nav-link sub-link" href="cards#region">Regional Cards</a>
+                    <a class="nav-link sub-link" href="cards#sustain">Sustain Cards</a>
+                    <a class="nav-link sub-link" href="cards#event">Event Cards</a>
                 </div>
             }
         </div>
@@ -55,7 +55,7 @@
         collapseNavMenu = !collapseNavMenu;
     }
 
-    private void ToggleCards() // ✅ 新增方法
+    private void ToggleCards()
     {
         showCards = !showCards;
     }

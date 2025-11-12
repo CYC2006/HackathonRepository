@@ -197,12 +197,12 @@ h4 {
 
 
 /* 讓錨點滾到時別貼頂：數字改成你的頂部高度（含 navbar）*/
-#region, #event, #other {
+#region, #sustain, #event {
   scroll-margin-top: 25px;   /* 80~120 視覺最舒服自己調 */
 }
 
 /* 區塊標題本身的外距，拉開各類別的分界 */
-#region, #event, #other {
+#region, #sustain, #event {
   margin-top: 48px;
   margin-bottom: 16px;
   padding-top: 4px;          /* 讓標題文字不會太擠 */
