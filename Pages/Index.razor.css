@@ -16,7 +16,7 @@
 
   background-image: url('/images/taiwan.png'); /* ← 改成你的圖片檔名 */
   background-size: 60% auto;         /* 讓圖片覆蓋整個畫面 */
-  background-position: 0% -2%;    /* 置中顯示 */
+  background-position: 0% 50%;    /* 置中顯示 */
   background-repeat: no-repeat;   /* 不重複平鋪 */
   border-radius: 12px;            /* （可選）加一點圓角讓邊緣更柔和 */
 }
@@ -189,7 +189,7 @@
   border-radius: 16px;          /* 圓角 */
   text-align: center;           /* 內容置中 */
   width: 90vw;                  /* ✅ 加寬：佔螢幕 90% */
-  max-width: 900px;            /* ✅ 最寬限制 */
+  max-width: 1000px;            /* ✅ 最寬限制 */
   box-shadow: 0 0 10px rgba(0,0,0,0.2); /* 陰影 */
   display: flex;                /* 使用 flex 垂直置中 */
   flex-direction: column;       /* 垂直排列內容 */
@@ -243,7 +243,7 @@
   flex-direction: column; /* arrange contents vertically */
   align-items: center;
   justify-content: flex-start;
-  width: 190px;
+  width: 210px;
   height: 285px;
   border: 2.5px solid #000000;
   border-radius: 8px;
@@ -334,7 +334,7 @@
   margin-top: 4px;
   margin-bottom: 2px;
   white-space: pre-line;
-  padding: 0 6px;
+  padding: 0 4px;
 }
 /* ====================================================== */
 

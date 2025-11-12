@@ -398,9 +398,9 @@
         Game.EcoScore += card.EcoChange;
         Game.SocialScore += card.SocialChange;
 
+        Game.ApplyWeeklyEffects();
         Game.RecordWeek();
         Game.Week++;
-
     }
 
     void PickCard(CardInfo card)

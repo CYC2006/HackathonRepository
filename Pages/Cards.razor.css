@@ -2,7 +2,7 @@
 /* Card Grid */
 .card-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   gap: 8px;
   justify-items: center;
   padding: 20px;
@@ -14,7 +14,8 @@
   flex-direction: column; /* arrange contents vertically */
   align-items: center;
   justify-content: flex-start;
-  width: 190px;
+  width: 210px;
+  height: 285px;
   border: 2.5px solid #000000;
   border-radius: 8px;
   background: #f8f9fa;
@@ -120,7 +121,7 @@
   margin-top: 4px;
   margin-bottom: 2px;
   white-space: pre-line;
-  padding: 0 6px;
+  padding: 0 4px;
 }
 /* ================================== */
 
