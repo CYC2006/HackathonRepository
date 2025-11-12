@@ -42,14 +42,14 @@ namespace Hackathon.Data
             new Row("四季", 1, -20, 6, 2, 4, 6, ""),
             new Row("四季", 2, 60, -4, 1, 6, 9, ""),
             new Row("四季", 3, 20, 3, 3, 10, 12, ""),
-            new Row("四季", 4, 70, -2, 2, 11, 2, ""),
+            new Row("四季", 4, 70, -2, 2, 1, 2, ""),
             new Row("四季", 5, -10, 7, 4, 2, 5, ""),
             new Row("四季", 6, 60, -5, 1, 6, 10, ""),
             new Row("四季", 7, 40, 6, 5, 9, 11, ""),
-            new Row("四季", 8, -40, 5, 1, 12, 2, ""),
+            new Row("四季", 8, -40, 5, 1, 1, 2, ""),
             new Row("四季", 9, 10, 8, 5, 6, 8, ""),
             new Row("四季", 10, 40, -4, 2, 9, 11, ""),
-            new Row("四季", 11, 30, 6, 4, 12, 2, ""),
+            new Row("四季", 11, 30, 6, 4, 1, 2, ""),
             new Row("四季", 12, 60, -2, 3, 2, 3, ""),
             new Row("四季", 13, 10, 8, 5, 3, 5, ""),
             new Row("四季", 14, -20, 5, 2, 7, 9, ""),
@@ -66,10 +66,10 @@ namespace Hackathon.Data
             new Row("天災", 9, -70, -4, -5, 5, 7, ""),
             new Row("天災", 10, -30, -4, -3, 7, 9, ""),
             new Row("天災", 11, -90, -8, -5, 9, 11, ""),
-            new Row("天災", 12, -100, -7, -6, 11, 1, ""),
+            new Row("天災", 12, -100, -7, -6, 1, 1, ""),
             new Row("天災", 13, -40, -2, -2, 2, 4, ""),
             new Row("天災", 14, -50, -4, -3, 9, 11, ""),
-            new Row("天災", 15, -70, -3, -5, 10, 3, ""),
+            new Row("天災", 15, -70, -3, -5, 1, 3, ""),
             new Row("天災", 16, -60, -3, -4, 7, 9, ""),
             new Row("天災", 17, -80, 2, -6, 10, 12, ""),
             new Row("天災", 18, -700, -30, -60, 1, 12, ""),
@@ -170,13 +170,13 @@ namespace Hackathon.Data
         {
             var result = new List<EventCardInfo>();
 
-            string CityToFolder(string c) => c switch
+            string TypeToFolder(string c) => c switch
             {
                 "四季" => "season",
                 "天災" => "disaster",
                 "政策" => "policy",
                 "經濟" => "economics",
-                "環境" => "environments",
+                "環境" => "environment",
                 "社會" => "social",
                 _ => c
             };
@@ -185,7 +185,7 @@ namespace Hackathon.Data
             {
                 if (row.Type == type)
                 {
-                    var folder = CityToFolder(type);
+                    var folder = TypeToFolder(type);
                     var img = $"/images/events/{folder}/{folder}{row.Index}.png";
 
                     var card = new EventCardInfo

@@ -32,20 +32,18 @@ else
                     <div class="card-image"></div>
                 }
                 <div class="card-stats">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span>
-                            <img src="/images/icons/Money.png" alt="Money" width="20" height="20" />
-                            @card.MoneyChange
-                        </span>
-                        <span>
-                            <img src="/images/icons/EcoScore.png" alt="Eco" width="20" height="20" />
-                            @card.EcoChange
-                        </span>
-                        <span>
-                            <img src="/images/icons/SocialScore.png" alt="Social" width="20" height="20" />
-                            @card.SocialChange
-                        </span>
-                    </div>
+                    <span>
+                        <img src="/images/icons/Money.png" alt="Money" width="20" height="20" />
+                        @card.MoneyChange
+                    </span>
+                    <span>
+                        <img src="/images/icons/EcoScore.png" alt="Eco" width="20" height="20" />
+                        @card.EcoChange
+                    </span>
+                    <span>
+                        <img src="/images/icons/SocialScore.png" alt="Social" width="20" height="20" />
+                        @card.SocialChange
+                    </span>
                 </div>
                 <div class="card-desc">@card.Description</div>
             </div>
@@ -119,7 +117,8 @@ else
                             @if (e.Duration == -1) { <text>Ever</text> }
                             else { <text>@e.Duration</text> }
                         </div>
-                    </div>                
+                    </div>
+                    <div class="card-desc">@baseCard.Description</div>
                 </div>
             }
         }
@@ -128,3 +127,36 @@ else
 
 
 <h2 id="other" style="text-align:left;">🃏 Event Cards</h2>
+
+@if (Game.TriggeredEvents.Count == 0)
+{
+    <h4 style="text-align:center; margin-top:20px;">----- No Events Triggered -----</h4>
+}
+else
+{
+    <div class="card-gallery">
+        @foreach (var e in Game.TriggeredEvents)
+        {
+            <div class="event-card">
+                <div class="event-card-type">【@e.Type】@e.Title</div>
+                    @if (!string.IsNullOrEmpty(e.ImagePath))
+                    {
+                        <img src="@e.ImagePath" alt="@e.Type" class="event-card-image" />
+                    }
+
+                    <div class="event-card-stats">
+                        <span>
+                            <img src="/images/icons/Money.png" width="18" /> @e.MoneyChange
+                        </span>
+                        <span>
+                            <img src="/images/icons/EcoScore.png" width="18" /> @e.EcoChange
+                        </span>
+                        <span>
+                            <img src="/images/icons/SocialScore.png" width="18" /> @e.SocialChange
+                        </span>
+                    </div>
+                <div class="event-card-desc">@e.Description</div>
+            </div>
+        }
+    </div>
+}

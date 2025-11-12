@@ -89,20 +89,18 @@
                             <div class="card-image"></div>
                         }
                         <div class="card-stats">
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <span>
-                                    <img src="/images/icons/Money.png" alt="Money" width="20" height="20" />
-                                    @card.MoneyChange
-                                </span>
-                                <span>
-                                    <img src="/images/icons/EcoScore.png" alt="Eco" width="20" height="20" />
-                                    @card.EcoChange
-                                </span>
-                                <span>
-                                    <img src="/images/icons/SocialScore.png" alt="Social" width="20" height="20" />
-                                    @card.SocialChange
-                                </span>
-                            </div>
+                            <span>
+                                <img src="/images/icons/Money.png" alt="Money" width="20" height="20" />
+                                @card.MoneyChange
+                            </span>
+                            <span>
+                                <img src="/images/icons/EcoScore.png" alt="Eco" width="20" height="20" />
+                                @card.EcoChange
+                            </span>
+                            <span>
+                                <img src="/images/icons/SocialScore.png" alt="Social" width="20" height="20" />
+                                @card.SocialChange
+                            </span>
                         </div>
                         <div class="card-desc">@card.Description</div>
                     </div>
@@ -149,8 +147,6 @@
                         <img src="@card.ImagePath" alt="@card.Type" class="event-card-image" />
                     }
 
-                    <div class="event-card-desc">@card.Description</div>
-
                     <div class="event-card-stats">
                         <span>
                             <img src="/images/icons/Money.png" width="18" /> @card.MoneyChange
@@ -162,6 +158,8 @@
                             <img src="/images/icons/SocialScore.png" width="18" /> @card.SocialChange
                         </span>
                     </div>
+
+                    <div class="event-card-desc">@card.Description</div>
                 </div>
             }
             <button class="close-button" @onclick="() => showEventCard = false">✖</button>
@@ -342,7 +340,7 @@
         {
             case "City": OpenCardPicker(tile); break;
             case "Transport": OpenTransportPicker(tile); break;
-            case "Event": OpenEventCardChooser(); break;
+            case "Event": OpenEventCardDisplayer(); break;
         }
 
         isRolling = false;
@@ -385,7 +383,7 @@
         currentTileTitle = $"🚆 {transportType} 搭乘目的地";
     }
 
-    void OpenEventCardChooser()
+    void OpenEventCardDisplayer()
     {
         int currentMonth = ((Game.Week - 1) / 4) + 1;
 
@@ -408,6 +406,8 @@
         Game.Money += card.MoneyChange;
         Game.EcoScore += card.EcoChange;
         Game.SocialScore += card.SocialChange;
+        
+        Game.AddEvent(card);
 
         Game.ApplyWeeklyEffects();
         Game.RecordWeek();

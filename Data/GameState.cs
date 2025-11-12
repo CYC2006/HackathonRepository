@@ -77,7 +77,6 @@ namespace Hackathon.Data
                 CollectedCards.Add(card);
         }
 
-
         // Sustain Card Collection System
         public void AddOngoingEffect(string source, string target, int min, int max, int duration)
         {
@@ -90,6 +89,21 @@ namespace Hackathon.Data
                 MaxChange = max,
                 Duration = duration // -1 means permanent
             });
+        }
+
+        // Event Card Record System
+        public List<EventCardInfo> TriggeredEvents { get; set; } = new();
+
+        public bool HasEvent(EventCardInfo e)
+        {
+            return TriggeredEvents.Exists(ev =>
+                ev.Description == e.Description && ev.Type == e.Type);
+        }
+
+        public void AddEvent(EventCardInfo e)
+        {
+            if (!HasEvent(e))
+                TriggeredEvents.Add(e.Clone());
         }
 
         public void ApplyWeeklyEffects()
