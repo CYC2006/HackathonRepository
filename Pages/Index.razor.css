@@ -255,12 +255,12 @@
   transition: transform 0.1s ease;
 }
 
-/* Background Color: rarity */
-.card-item.rarity-bg-N   { background: linear-gradient(to bottom, #f8f9fa, #e0e0e0); }
-.card-item.rarity-bg-R   { background: linear-gradient(to bottom, #d8ecff, #a8c8ff); }
-.card-item.rarity-bg-SR  { background: linear-gradient(to bottom, #f0e4ff, #c9afff); }
-.card-item.rarity-bg-SSR { background: linear-gradient(to bottom, #fff3d1, #ffd86b); }
-.card-item.rarity-bg-UR  { background: linear-gradient(to bottom, #ffe4ec, #ffb6c9); }
+/* Background Color: same */
+.card-item.rarity-bg-N,
+.card-item.rarity-bg-R,
+.card-item.rarity-bg-SR,
+.card-item.rarity-bg-SSR,
+.card-item.rarity-bg-UR { background: linear-gradient(to bottom, #f8f9fa, #e0e0e0); }
 
 /* Zoom in/out when touching Cursor */
 .card-item:hover { transform: scale(1.02); }
@@ -293,15 +293,6 @@
     text-align: left;
     color: #333;
 }
-
-.card-rarity {
-    font-weight: 700;
-}
-.rarity-N   { color: #777; }
-.rarity-R   { color: #2c6dc9; }
-.rarity-SR  { color: #7a44cc; }
-.rarity-SSR { color: #c48b00; }
-.rarity-UR  { color: #c2185b; }
 
 /* Card Photo */
 .card-image {

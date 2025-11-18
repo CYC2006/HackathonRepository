@@ -3,7 +3,7 @@
 .card-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 8px;
+  gap: 20px;
   justify-items: center;
   padding: 20px;
   margin-bottom: 32px;
